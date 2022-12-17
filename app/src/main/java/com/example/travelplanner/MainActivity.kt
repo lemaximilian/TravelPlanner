@@ -11,6 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.travelplanner.ui.theme.TravelPlannerTheme
 import com.example.travelplanner.view.NavHostView
+import com.example.travelplanner.viewmodel.TripListViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +24,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val navController = rememberNavController()
-                    NavHostView(navController = navController)
+                    val tripListViewModel = TripListViewModel()
+                    NavHostView(navController = navController, tripListViewModel)
                 }
             }
         }
@@ -35,6 +37,7 @@ class MainActivity : ComponentActivity() {
 fun DefaultPreview() {
     TravelPlannerTheme {
         val navController = rememberNavController()
-        NavHostView(navController = navController)
+        val tripListViewModel = TripListViewModel()
+        NavHostView(navController = navController, tripListViewModel)
     }
 }
