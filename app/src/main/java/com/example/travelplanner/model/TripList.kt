@@ -15,6 +15,8 @@ class TripList {
 
     }
 
+    fun tripList() = tripList
+
     fun addTrip(trip: Trip) {
         tripList += trip
     }

@@ -7,6 +7,8 @@ import com.example.travelplanner.model.TripList
 class TripListViewModel: ViewModel() {
     private val tripList = TripList()
 
+    fun tripList() = tripList.tripList()
+
     fun getTripList() = tripList.getAll()
 
     fun addTrip(name: String) {
