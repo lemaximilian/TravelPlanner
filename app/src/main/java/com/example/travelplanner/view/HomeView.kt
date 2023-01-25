@@ -38,7 +38,11 @@ fun HomeView(navController: NavHostController, tripListViewModel: TripListViewMo
 
 @Composable
 fun TripGrid(tripListViewModel: TripListViewModel, padding: PaddingValues) {
-    LazyVerticalGrid(columns = GridCells.Fixed(2), contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp), verticalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.padding(padding)) {
+    LazyVerticalGrid(columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = Modifier.padding(padding)
+    ) {
         items(tripListViewModel.tripList()) { trip ->
             TripCard(trip)
         }
@@ -47,7 +51,14 @@ fun TripGrid(tripListViewModel: TripListViewModel, padding: PaddingValues) {
 
 @Composable
 fun TripCard(trip: Trip){
-    Box(shape = RoundedCornerShape(10.dp))
+    Button(onClick = { /*TODO*/ },
+        modifier = Modifier
+            .height(175.dp)
+            .width(175.dp)
+            .padding(paddingValues = PaddingValues(horizontal = 8.dp))
+    ) {
+        Text(trip.name)
+    }
 }
 
 @Composable
