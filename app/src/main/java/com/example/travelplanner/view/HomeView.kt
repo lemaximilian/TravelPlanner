@@ -3,10 +3,15 @@ package com.example.travelplanner.view
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -23,19 +28,58 @@ fun HomeView(navController: NavHostController, tripListViewModel: TripListViewMo
         },
         bottomBar = {
             BottomNavigation(navController = navController)
-        }
-    ) { padding ->
-        if(tripListViewModel.tripList().isEmpty()) {
-            Column(
-                modifier = Modifier.fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text("Keine Reise verfügbar")
+        },
+        floatingActionButton = {
+            val openDialog = remember { mutableStateOf(false) }
+            val textState = remember { mutableStateOf(TextFieldValue()) }
+
+            FloatingActionButton(onClick = { openDialog.value = true }) {
+                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add")
+            }
+
+            if(openDialog.value) {
+                AlertDialog(
+                    onDismissRequest = { openDialog.value = false },
+                    title = {
+                        Text(
+                            "Reise erstellen",
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                    },
+                    text = {
+                           TextField(value = textState.value, onValueChange = {
+                               textState.value = it
+                           })
+                    },
+                    confirmButton = {
+                        Button(onClick = { openDialog.value = false }) {
+                            Text("Erstellen")
+                        }
+                    },
+                    dismissButton = {
+                        Button(onClick = { openDialog.value = false }) {
+                            Text("Abbrechen")
+                        }
+                    }
+                )
             }
         }
-        else
-            TripGrid(tripListViewModel, padding)
+    ) { padding ->
+        Column {
+            if(tripListViewModel.tripList().isEmpty()) {
+                Column(
+                    modifier = Modifier.fillMaxSize(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text("Keine Reise verfügbar")
+                }
+            }
+            else
+                TripGrid(tripListViewModel, padding)
+        }
     }
 }
 
