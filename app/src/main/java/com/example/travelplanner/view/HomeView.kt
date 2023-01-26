@@ -1,11 +1,13 @@
 package com.example.travelplanner.view
 
+import android.app.AlertDialog
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -54,7 +56,10 @@ fun HomeView(navController: NavHostController, tripListViewModel: TripListViewMo
                            })
                     },
                     confirmButton = {
-                        Button(onClick = { openDialog.value = false }) {
+                        Button(onClick = {
+                            tripListViewModel.addTrip(textState.value.text)
+                            openDialog.value = false
+                        }) {
                             Text("Erstellen")
                         }
                     },
@@ -116,3 +121,4 @@ fun LazyGridScope.header(
 ) {
     item(span = { GridItemSpan(this.maxLineSpan) }, content = content)
 }
+
