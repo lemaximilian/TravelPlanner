@@ -26,14 +26,16 @@ fun AddTripView(navController: NavHostController, tripListViewModel: TripListVie
         bottomBar = {
             BottomNavigation(navController = navController)
         }
-    ) { padding ->
+    ) { _ ->
         Column(Modifier.padding(16.dp)) {
             Text("Name der Reise", fontWeight = FontWeight.Bold)
             TextField(value = textState.value, onValueChange = {
                 textState.value = it
             })
             Text("Die Reise hat folgenden Namen: " + textState.value.text)
-            Button(onClick = { tripListViewModel.addTrip(textState.value.text) }) {
+            Button(onClick = {
+                tripListViewModel.addTrip(textState.value.text)
+            }) {
                 Text("Reise hinzufügen")
             }
         }

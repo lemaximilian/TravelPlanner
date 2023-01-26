@@ -1,17 +1,13 @@
 package com.example.travelplanner.view
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.travelplanner.model.Trip
@@ -29,8 +25,15 @@ fun HomeView(navController: NavHostController, tripListViewModel: TripListViewMo
             BottomNavigation(navController = navController)
         }
     ) { padding ->
-        if(tripListViewModel.tripList().isEmpty())
-            Text("Keine Reisen verfügbar")
+        if(tripListViewModel.tripList().isEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text("Keine Reise verfügbar")
+            }
+        }
         else
             TripGrid(tripListViewModel, padding)
     }
@@ -39,10 +42,13 @@ fun HomeView(navController: NavHostController, tripListViewModel: TripListViewMo
 @Composable
 fun TripGrid(tripListViewModel: TripListViewModel, padding: PaddingValues) {
     LazyVerticalGrid(columns = GridCells.Fixed(2),
-        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 8.dp),
+        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(padding)
     ) {
+        header {
+            Text("Ihre Reisen", fontWeight = FontWeight.Bold, modifier = Modifier.padding(PaddingValues(horizontal = 8.dp)))
+        }
         items(tripListViewModel.tripList()) { trip ->
             TripCard(trip)
         }
@@ -53,24 +59,16 @@ fun TripGrid(tripListViewModel: TripListViewModel, padding: PaddingValues) {
 fun TripCard(trip: Trip){
     Button(onClick = { /*TODO*/ },
         modifier = Modifier
-            .height(175.dp)
-            .width(175.dp)
-            .padding(paddingValues = PaddingValues(horizontal = 8.dp))
+            .height(180.dp)
+            .width(180.dp)
+            .padding(paddingValues = PaddingValues(horizontal = 4.dp))
     ) {
         Text(trip.name)
     }
 }
 
-@Composable
-fun Box(shape: RoundedCornerShape){
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .wrapContentSize(Alignment.Center)) {
-        Box(
-            modifier = Modifier
-                .size(185.dp)
-                .clip(shape)
-                .background(Color.Red)
-        )
-    }
+fun LazyGridScope.header(
+    content: @Composable LazyGridItemScope.() -> Unit
+) {
+    item(span = { GridItemSpan(this.maxLineSpan) }, content = content)
 }
