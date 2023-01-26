@@ -13,5 +13,6 @@ fun NavHostView(navController: NavHostController, tripListViewModel: TripListVie
         composable(BottomNavItem.Main.screen_route) { HomeView(navController, tripListViewModel) }
         composable(BottomNavItem.AddTrip.screen_route) { AddTripView(navController, tripListViewModel) }
         composable(BottomNavItem.Settings.screen_route) { SettingsView(navController) }
+
     }
 }
