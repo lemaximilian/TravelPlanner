@@ -19,6 +19,7 @@ class TripList {
 
     fun addTrip(trip: Trip) {
         tripList += trip
+        tripListLive.postValue(tripList)
     }
 
     fun getAll(): LiveData<List<Trip>> = tripListLive

@@ -6,6 +6,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -19,7 +20,7 @@ import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.TripListViewModel
 
 @Composable
-fun HomeView(navController: NavHostController, tripListViewModel: TripListViewModel) {
+fun HomeView(navController: NavHostController, tripListViewModel: TripListViewModel, tripList: List<Trip>) {
     Scaffold(
         topBar = {
             TopAppBar() {
@@ -54,7 +55,10 @@ fun HomeView(navController: NavHostController, tripListViewModel: TripListViewMo
                            })
                     },
                     confirmButton = {
-                        Button(onClick = { openDialog.value = false }) {
+                        Button(onClick = {
+                            tripListViewModel.addTrip(textState.value.text)
+                            openDialog.value = false
+                        }) {
                             Text("Erstellen")
                         }
                     },
@@ -68,7 +72,7 @@ fun HomeView(navController: NavHostController, tripListViewModel: TripListViewMo
         }
     ) { padding ->
         Column {
-            if(tripListViewModel.tripList().isEmpty()) {
+            if(tripList.isEmpty()) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
                     verticalArrangement = Arrangement.Center,
@@ -78,13 +82,13 @@ fun HomeView(navController: NavHostController, tripListViewModel: TripListViewMo
                 }
             }
             else
-                TripGrid(tripListViewModel, padding)
+                TripGrid(tripListViewModel, tripList, padding)
         }
     }
 }
 
 @Composable
-fun TripGrid(tripListViewModel: TripListViewModel, padding: PaddingValues) {
+fun TripGrid(tripListViewModel: TripListViewModel, tripList: List<Trip>, padding: PaddingValues) {
     LazyVerticalGrid(columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -93,21 +97,21 @@ fun TripGrid(tripListViewModel: TripListViewModel, padding: PaddingValues) {
         header {
             Text("Ihre Reisen", fontWeight = FontWeight.Bold, modifier = Modifier.padding(PaddingValues(horizontal = 8.dp)))
         }
-        items(tripListViewModel.tripList()) { trip ->
-            TripCard(trip)
+        items(tripList) { trip ->
+            TripCard(trip.name)
         }
     }
 }
 
 @Composable
-fun TripCard(trip: Trip){
+fun TripCard(tripName: String){
     Button(onClick = { /*TODO*/ },
         modifier = Modifier
             .height(180.dp)
             .width(180.dp)
             .padding(paddingValues = PaddingValues(horizontal = 4.dp))
     ) {
-        Text(trip.name)
+        Text(tripName)
     }
 }
 
@@ -116,3 +120,4 @@ fun LazyGridScope.header(
 ) {
     item(span = { GridItemSpan(this.maxLineSpan) }, content = content)
 }
+
