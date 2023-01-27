@@ -39,7 +39,7 @@ import com.google.common.reflect.Reflection.getPackageName
 
 
 
- fun getVideoUri():Uri{
+fun getVideoUri():Uri{
 val videoRes = R.raw.video
     return Uri.parse("android.resource://com.example.travelplanner/$videoRes")
 }

@@ -3,10 +3,13 @@ package com.example.travelplanner
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
@@ -17,6 +20,8 @@ import com.example.travelplanner.viewmodel.TripListViewModel
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val tripListViewModel by viewModels<TripListViewModel>()
         setContent {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             TravelPlannerTheme {
@@ -26,20 +31,22 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colors.background
                 ) {
                     val navController = rememberNavController()
-                    val tripListViewModel = TripListViewModel()
-                    NavHostView(navController = navController, tripListViewModel)
+                    val tripList by tripListViewModel.getTripList().observeAsState(emptyList())
+                    NavHostView(navController = navController, tripListViewModel = tripListViewModel, tripList = tripList)
                 }
             }
         }
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
 fun DefaultPreview() {
     TravelPlannerTheme {
-        val navController = rememberNavController()
         val tripListViewModel = TripListViewModel()
-        NavHostView(navController = navController, tripListViewModel)
+        val navController = rememberNavController()
+        val tripList by tripListViewModel.getTripList().observeAsState(emptyList())
+        NavHostView(navController = navController, tripListViewModel = tripListViewModel, tripList = tripList)
     }
 }
