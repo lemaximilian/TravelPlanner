@@ -10,10 +10,11 @@ import com.example.travelplanner.viewmodel.TripListViewModel
 
 @Composable
 fun NavHostView(navController: NavHostController, tripListViewModel: TripListViewModel,tripList: List<Trip>) {
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(navController = navController, startDestination = "WelcomeView") {
         composable(BottomNavItem.Main.screen_route) { HomeView(navController, tripListViewModel, tripList) }
         composable(BottomNavItem.AddTrip.screen_route) { AddTripView(navController, tripListViewModel) }
         composable(BottomNavItem.Settings.screen_route) { SettingsView(navController) }
+        composable("WelcomeView"){ WelcomeView(navController = navController)}
 
     }
 }
