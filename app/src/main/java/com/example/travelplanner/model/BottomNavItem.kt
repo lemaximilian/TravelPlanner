@@ -10,4 +10,5 @@ sealed class BottomNavItem(var title: String, var icon: ImageVector, var screen_
     object Main : BottomNavItem("Home", Icons.Filled.Home,"home")
     object AddTrip: BottomNavItem("Reise hinzufügen",Icons.Filled.Add,"add")
     object Settings: BottomNavItem("Einstellungen",Icons.Filled.Settings,"settings")
+
 }

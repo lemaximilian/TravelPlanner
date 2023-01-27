@@ -25,7 +25,7 @@ fun SettingsView(navController: NavHostController) {
         Text(text = "SettingsView", modifier = Modifier.padding(padding))
 
     }
-    SetName(getVideoUri())
+
 
 
 }

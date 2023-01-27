@@ -23,9 +23,12 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.navigation.NavController
+import androidx.navigation.navArgument
 import com.example.travelplanner.R
 import com.example.travelplanner.ui.theme.Shapes
 import com.google.android.exoplayer2.ExoPlayer
@@ -36,10 +39,18 @@ import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
 import com.google.android.exoplayer2.ui.StyledPlayerView
 import com.google.common.reflect.Reflection.getPackageName
 
+@Composable
+fun WelcomeView(navController: NavController){
+
+    SetName(getVideoUri(),navController)
+}
 
 
 
- fun getVideoUri():Uri{
+
+
+
+ private fun getVideoUri():Uri{
 val videoRes = R.raw.video
     return Uri.parse("android.resource://com.example.travelplanner/$videoRes")
 }
@@ -63,7 +74,7 @@ private fun Context.buildPlayerView(exoPlayer: ExoPlayer)= StyledPlayerView(this
 
 
 @Composable
-fun SetName(videoUri: Uri) {
+fun SetName(videoUri: Uri,navController: NavController) {
     val context = LocalContext.current
     val exoPlayer = remember {context.buildExoPlayer(videoUri)}
     
@@ -97,11 +108,12 @@ fun SetName(videoUri: Uri) {
 
         )
         TextInput(Input.User)
-        Button(onClick = {}, modifier = Modifier
+        Button(onClick = {navController.navigate("Home"){navController.popBackStack()}}, modifier = Modifier
             .padding(vertical = 15.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
             .background(Color.Blue)
+
 
         )
 
@@ -118,14 +130,14 @@ fun SetName(videoUri: Uri) {
 @Composable
 fun TextInput(Input: Input){
 
-  var value by remember {mutableStateOf("")}
+  var value by remember {mutableStateOf(TextFieldValue())}
 
       TextField(
           value = value, onValueChange = { value = it },
           Modifier
               .fillMaxWidth()
-              .clip(
-                  RoundedCornerShape(20.dp)
+              .clip(RoundedCornerShape(20.dp)
+
               ),
           leadingIcon = {
               Icon(
