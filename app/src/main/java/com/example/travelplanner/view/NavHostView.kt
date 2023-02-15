@@ -9,12 +9,13 @@ import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.TripListViewModel
 
 @Composable
-fun NavHostView(navController: NavHostController, tripListViewModel: TripListViewModel,tripList: List<Trip>) {
+fun NavHostView(navController: NavHostController, tripListViewModel: TripListViewModel, tripList: List<Trip>) {
     NavHost(navController = navController, startDestination = "WelcomeView") {
         composable(BottomNavItem.Main.screen_route) { HomeView(navController, tripListViewModel, tripList) }
         composable(BottomNavItem.AddTrip.screen_route) { AddTripView(navController, tripListViewModel) }
         composable(BottomNavItem.Settings.screen_route) { SettingsView(navController) }
-        composable("WelcomeView"){ WelcomeView(navController = navController)}
-
+        composable("WelcomeView"){ WelcomeView(navController) }
+        composable("TripView") { TripView(navController) }
+        composable("map") { MapView(navController, tripListViewModel) }
     }
 }

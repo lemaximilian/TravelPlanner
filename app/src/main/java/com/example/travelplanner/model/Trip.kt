@@ -1,3 +1,5 @@
 package com.example.travelplanner.model
 
-data class Trip(val name: String)
+import java.util.UUID
+
+data class Trip(val id: UUID, val name: String)

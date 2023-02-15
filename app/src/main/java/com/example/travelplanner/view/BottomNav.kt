@@ -21,7 +21,8 @@ fun BottomNavigation(navController: NavHostController) {
     val items = listOf(
         BottomNavItem.Main,
         BottomNavItem.AddTrip,
-        BottomNavItem.Settings
+        BottomNavItem.Settings,
+        BottomNavItem.Map
     )
     BottomNavigation(
         backgroundColor = Color.Blue,

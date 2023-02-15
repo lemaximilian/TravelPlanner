@@ -26,6 +26,4 @@ fun SettingsView(navController: NavHostController) {
 
     }
 
-
-
 }

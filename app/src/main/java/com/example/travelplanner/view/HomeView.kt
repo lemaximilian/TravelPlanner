@@ -82,13 +82,13 @@ fun HomeView(navController: NavHostController, tripListViewModel: TripListViewMo
                 }
             }
             else
-                TripGrid(tripListViewModel, tripList, padding)
+                TripGrid(navController, tripListViewModel, tripList, padding)
         }
     }
 }
 
 @Composable
-fun TripGrid(tripListViewModel: TripListViewModel, tripList: List<Trip>, padding: PaddingValues) {
+fun TripGrid(navController: NavHostController, tripListViewModel: TripListViewModel, tripList: List<Trip>, padding: PaddingValues) {
     LazyVerticalGrid(columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -98,20 +98,20 @@ fun TripGrid(tripListViewModel: TripListViewModel, tripList: List<Trip>, padding
             Text("Ihre Reisen", fontWeight = FontWeight.Bold, modifier = Modifier.padding(PaddingValues(horizontal = 8.dp)))
         }
         items(tripList) { trip ->
-            TripCard(trip.name)
+            TripCard(navController ,trip)
         }
     }
 }
 
 @Composable
-fun TripCard(tripName: String){
-    Button(onClick = { /*TODO*/ },
+fun TripCard(navController: NavHostController, trip: Trip){
+    Button(onClick = { navController.navigate("TripView") },
         modifier = Modifier
             .height(180.dp)
             .width(180.dp)
             .padding(paddingValues = PaddingValues(horizontal = 4.dp))
     ) {
-        Text(tripName)
+        Text(trip.name)
     }
 }
 
