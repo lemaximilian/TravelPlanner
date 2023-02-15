@@ -3,10 +3,8 @@ package com.example.travelplanner.view
 
 import android.content.Context
 import android.net.Uri
-import android.provider.MediaStore.Video
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
-import android.widget.VideoView
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,21 +21,18 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
-import androidx.navigation.navArgument
 import com.example.travelplanner.R
 import com.example.travelplanner.ui.theme.Shapes
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
-
 import com.google.android.exoplayer2.ui.StyledPlayerView
-import com.google.common.reflect.Reflection.getPackageName
+
 
 @Composable
 fun WelcomeView(navController: NavController){
@@ -75,8 +70,11 @@ private fun Context.buildPlayerView(exoPlayer: ExoPlayer)= StyledPlayerView(this
 
 @Composable
 fun SetName(videoUri: Uri,navController: NavController) {
+    var username by remember { mutableStateOf("") }
     val context = LocalContext.current
     val exoPlayer = remember {context.buildExoPlayer(videoUri)}
+
+
     
     DisposableEffect(
         AndroidView(factory ={it.buildPlayerView(exoPlayer)},
@@ -94,20 +92,20 @@ fun SetName(videoUri: Uri,navController: NavController) {
 
     Column(modifier = Modifier
 
-        .padding(24.dp)
-        .fillMaxSize(),
+        .padding(40.dp)
+        .fillMaxSize()
+        .offset(y=(-40).dp),
 
-        verticalArrangement = Arrangement.spacedBy(20.dp, alignment = Alignment.Bottom),
+        verticalArrangement = Arrangement.spacedBy(15.dp, alignment = Alignment.Bottom),
         horizontalAlignment = Alignment.CenterHorizontally)
     {
-        Icon(
-            painter = painterResource(id = R.drawable.logo, ),
-            contentDescription = null,
-            Modifier.size(250.dp),
-            tint = Color.White
 
-        )
+
         TextInput(Input.User)
+
+
+
+
         Button(onClick = {navController.navigate("Home"){navController.popBackStack()}}, modifier = Modifier
             .padding(vertical = 15.dp)
             .fillMaxWidth()
@@ -125,18 +123,23 @@ fun SetName(videoUri: Uri,navController: NavController) {
 
 
 
+
     }
+
 }
 @Composable
 fun TextInput(Input: Input){
 
-  var value by remember {mutableStateOf(TextFieldValue())}
+        var value by remember { mutableStateOf("") }
+
 
       TextField(
-          value = value, onValueChange = { value = it },
-          Modifier
+            value = value, onValueChange = { value = it },
+                Modifier
               .fillMaxWidth()
               .clip(RoundedCornerShape(20.dp)
+
+
 
               ),
           leadingIcon = {
@@ -177,3 +180,4 @@ sealed class Input(
 
 
  }
+
