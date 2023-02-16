@@ -18,7 +18,8 @@ import com.example.travelplanner.view.NavHostView
 import com.example.travelplanner.viewmodel.TripListViewModel
 
 class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
+
+override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val tripListViewModel by viewModels<TripListViewModel>()
@@ -36,6 +37,7 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
     }
 }
 

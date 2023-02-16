@@ -6,7 +6,6 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -19,8 +18,17 @@ import androidx.navigation.NavHostController
 import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.TripListViewModel
 
+
 @Composable
 fun HomeView(navController: NavHostController, tripListViewModel: TripListViewModel, tripList: List<Trip>) {
+
+
+
+
+        
+   
+        
+    
     Scaffold(
         topBar = {
             TopAppBar() {
@@ -120,4 +128,5 @@ fun LazyGridScope.header(
 ) {
     item(span = { GridItemSpan(this.maxLineSpan) }, content = content)
 }
+
 

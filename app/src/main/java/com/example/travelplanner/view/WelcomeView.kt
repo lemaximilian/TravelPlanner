@@ -38,6 +38,7 @@ import com.google.android.exoplayer2.ui.StyledPlayerView
 fun WelcomeView(navController: NavController){
 
     SetName(getVideoUri(),navController)
+
 }
 
 
