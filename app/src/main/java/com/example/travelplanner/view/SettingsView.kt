@@ -16,9 +16,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.room.Room
-import com.example.travelplanner.model.ToDoDatabase
-import com.example.travelplanner.model.ToDoItem
+
 
 
 @Composable
@@ -42,7 +40,7 @@ fun SettingsView(navController: NavHostController) {
 @Composable
 fun ToDoList() {
 
-    val context = LocalContext.current
+
     val toDoList = remember { mutableStateListOf<String>()}
     val (text, setText) = remember { mutableStateOf("") }
     val checkedState = remember { mutableStateListOf<Boolean>() }
