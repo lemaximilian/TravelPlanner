@@ -1,7 +1,33 @@
 package com.example.travelplanner.view
 
-import androidx.navigation.NavHostController
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.runtime.Composable
+import androidx.navigation.NavController
 import com.example.travelplanner.model.Trip
+import com.example.travelplanner.viewmodel.TripListViewModel
 
-class TripView(navHostController: NavHostController) {
+@Composable
+fun TripView(navController: NavController, tripListViewModel: TripListViewModel, trip: Trip?) {
+    Scaffold(
+        topBar = { TopAppBar() {
+            IconButton(onClick = { navController.navigateUp() }) {
+                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+            }
+        }
+        },
+        content = { padding ->
+
+        },
+        floatingActionButton = { FloatingActionButton(onClick = {}) {
+            Text("X")
+        }
+        },
+        bottomBar = { BottomAppBar() {
+            Text(trip!!.name)
+        }
+        }
+    )
 }
+

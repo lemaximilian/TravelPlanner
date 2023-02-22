@@ -1,6 +1,5 @@
 package com.example.travelplanner.viewmodel
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -20,6 +19,8 @@ class TripListViewModel(): ViewModel() {
     fun addTrip(name: String) {
         tripList.addTrip(Trip(UUID.randomUUID(), name))
     }
-    val usernameState = mutableStateOf("")
 
+    fun getTrip(id: UUID): Trip? {
+        return tripList.getTrip(id)
+    }
 }
