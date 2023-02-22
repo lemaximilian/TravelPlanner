@@ -98,14 +98,14 @@ fun TripGrid(navController: NavHostController, tripListViewModel: TripListViewMo
             Text("Ihre Reisen", fontWeight = FontWeight.Bold, modifier = Modifier.padding(PaddingValues(horizontal = 8.dp)))
         }
         items(tripList) { trip ->
-            TripCard(navController ,trip)
+            TripCard(navController, trip)
         }
     }
 }
 
 @Composable
 fun TripCard(navController: NavHostController, trip: Trip){
-    Button(onClick = { navController.navigate("TripView") },
+    Button(onClick = { navController.navigate("TripView/" + trip.id) },
         modifier = Modifier
             .height(180.dp)
             .width(180.dp)

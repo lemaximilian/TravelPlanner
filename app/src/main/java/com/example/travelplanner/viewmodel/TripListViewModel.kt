@@ -19,4 +19,8 @@ class TripListViewModel(): ViewModel() {
     fun addTrip(name: String) {
         tripList.addTrip(Trip(UUID.randomUUID(), name))
     }
+
+    fun getTrip(id: UUID): Trip? {
+        return tripList.getTrip(id)
+    }
 }
