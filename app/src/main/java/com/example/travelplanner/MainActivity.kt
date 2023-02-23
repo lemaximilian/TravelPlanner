@@ -33,7 +33,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
                 ) {
                     val navController = rememberNavController()
                     val tripList by tripListViewModel.getTripList().observeAsState(emptyList())
-                    NavHostView(navController = navController, tripListViewModel = tripListViewModel, tripList = tripList)
+                    NavHostView(navController = navController, viewModel = tripListViewModel, tripList = tripList)
                 }
             }
         }
@@ -49,6 +49,6 @@ fun DefaultPreview() {
         val tripListViewModel = TripListViewModel()
         val navController = rememberNavController()
         val tripList by tripListViewModel.getTripList().observeAsState(emptyList())
-        NavHostView(navController = navController, tripListViewModel = tripListViewModel, tripList = tripList)
+        NavHostView(navController = navController, viewModel = tripListViewModel, tripList = tripList)
     }
 }

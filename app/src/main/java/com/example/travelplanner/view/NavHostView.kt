@@ -8,21 +8,21 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.travelplanner.model.BottomNavItem
 import com.example.travelplanner.model.Trip
-import com.example.travelplanner.viewmodel.TripListViewModel
+import com.example.travelplanner.viewmodel.MainViewModel
 import java.util.*
 
 @Composable
-fun NavHostView(navController: NavHostController, tripListViewModel: TripListViewModel, tripList: List<Trip>) {
+fun NavHostView(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>) {
     NavHost(navController = navController, startDestination = "WelcomeView") {
-        composable(BottomNavItem.Main.screen_route) { HomeView(navController, tripListViewModel, tripList) }
-        composable(BottomNavItem.AddTrip.screen_route) { AddTripView(navController, tripListViewModel) }
+        composable(BottomNavItem.Main.screen_route) { HomeView(navController, viewModel, tripList) }
+        composable(BottomNavItem.AddTrip.screen_route) { AddTripView(navController, viewModel) }
         composable(BottomNavItem.Settings.screen_route) { SettingsView(navController) }
         composable("WelcomeView"){ WelcomeView(navController) }
         composable("TripView/{id}", arguments = listOf(navArgument("id") { type = NavType.StringType})) {
             val id = it.arguments?.getString("id")
-            val trip = tripListViewModel.getTrip(UUID.fromString(id))
-            TripView(navController, tripListViewModel, trip)
+            val trip = viewModel.getTrip(UUID.fromString(id))
+            TripView(navController, viewModel, trip)
         }
-        composable(BottomNavItem.Map.screen_route) { MapView(navController, tripListViewModel) }
+        composable(BottomNavItem.Map.screen_route) { MapView(navController, viewModel) }
     }
 }

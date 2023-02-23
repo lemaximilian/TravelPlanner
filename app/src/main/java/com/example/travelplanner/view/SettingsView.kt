@@ -39,13 +39,9 @@ fun SettingsView(navController: NavHostController) {
 
 @Composable
 fun ToDoList() {
-
-
     val toDoList = remember { mutableStateListOf<String>()}
     val (text, setText) = remember { mutableStateOf("") }
     val checkedState = remember { mutableStateListOf<Boolean>() }
-
-
 
     Column(
         modifier = Modifier.fillMaxSize()

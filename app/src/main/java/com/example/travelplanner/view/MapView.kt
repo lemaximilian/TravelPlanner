@@ -7,14 +7,14 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavController
-import com.example.travelplanner.viewmodel.TripListViewModel
+import com.example.travelplanner.viewmodel.MainViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
-fun MapView(navController: NavController, tripListViewModel: TripListViewModel) {
+fun MapView(navController: NavController, viewModel: MainViewModel) {
     Scaffold(
         topBar = { TopAppBar() {
             IconButton(onClick = { navController.navigateUp() }) {

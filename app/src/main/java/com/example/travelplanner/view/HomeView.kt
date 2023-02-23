@@ -16,19 +16,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.travelplanner.model.Trip
-import com.example.travelplanner.viewmodel.TripListViewModel
-
+import com.example.travelplanner.viewmodel.MainViewModel
 
 @Composable
-fun HomeView(navController: NavHostController, tripListViewModel: TripListViewModel, tripList: List<Trip>) {
-
-
-
-
-        
-   
-        
-    
+fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>) {
     Scaffold(
         topBar = {
             TopAppBar() {
@@ -64,7 +55,7 @@ fun HomeView(navController: NavHostController, tripListViewModel: TripListViewMo
                     },
                     confirmButton = {
                         Button(onClick = {
-                            tripListViewModel.addTrip(textState.value.text)
+                            viewModel.addTrip(textState.value.text)
                             openDialog.value = false
                         }) {
                             Text("Erstellen")
@@ -90,13 +81,13 @@ fun HomeView(navController: NavHostController, tripListViewModel: TripListViewMo
                 }
             }
             else
-                TripGrid(navController, tripListViewModel, tripList, padding)
+                TripGrid(navController, viewModel, tripList, padding)
         }
     }
 }
 
 @Composable
-fun TripGrid(navController: NavHostController, tripListViewModel: TripListViewModel, tripList: List<Trip>, padding: PaddingValues) {
+fun TripGrid(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>, padding: PaddingValues) {
     LazyVerticalGrid(columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),

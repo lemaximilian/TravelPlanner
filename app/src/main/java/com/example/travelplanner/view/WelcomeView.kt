@@ -19,7 +19,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
@@ -41,13 +40,8 @@ fun WelcomeView(navController: NavController){
 
 }
 
-
-
-
-
-
- private fun getVideoUri():Uri{
-val videoRes = R.raw.video
+private fun getVideoUri():Uri{
+    val videoRes = R.raw.video
     return Uri.parse("android.resource://com.example.travelplanner/$videoRes")
 }
 

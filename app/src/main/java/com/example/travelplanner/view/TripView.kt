@@ -6,10 +6,10 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.example.travelplanner.model.Trip
-import com.example.travelplanner.viewmodel.TripListViewModel
+import com.example.travelplanner.viewmodel.MainViewModel
 
 @Composable
-fun TripView(navController: NavController, tripListViewModel: TripListViewModel, trip: Trip?) {
+fun TripView(navController: NavController, viewModel: MainViewModel, trip: Trip?) {
     Scaffold(
         topBar = { TopAppBar() {
             IconButton(onClick = { navController.navigateUp() }) {

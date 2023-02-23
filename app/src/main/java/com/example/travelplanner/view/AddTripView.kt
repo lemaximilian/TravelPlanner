@@ -11,10 +11,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.example.travelplanner.viewmodel.TripListViewModel
+import com.example.travelplanner.viewmodel.MainViewModel
 
 @Composable
-fun AddTripView(navController: NavHostController, tripListViewModel: TripListViewModel) {
+fun AddTripView(navController: NavHostController, viewModel: MainViewModel) {
     val textState = remember { mutableStateOf(TextFieldValue()) }
 
     Scaffold(
@@ -34,7 +34,7 @@ fun AddTripView(navController: NavHostController, tripListViewModel: TripListVie
             })
             Text("Die Reise hat folgenden Namen: " + textState.value.text)
             Button(onClick = {
-                tripListViewModel.addTrip(textState.value.text)
+                viewModel.addTrip(textState.value.text)
             }) {
                 Text("Reise hinzufügen")
             }

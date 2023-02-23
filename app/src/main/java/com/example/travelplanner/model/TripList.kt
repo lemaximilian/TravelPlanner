@@ -16,10 +16,13 @@ class TripList {
 
     }
 
-    fun tripList() = tripList
-
     fun addTrip(trip: Trip) {
         tripList += trip
+        tripListLive.postValue(tripList)
+    }
+
+    fun deleteTrip(trip: Trip) {
+        tripList -= trip
         tripListLive.postValue(tripList)
     }
 
