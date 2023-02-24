@@ -26,9 +26,5 @@ class TripList {
         tripListLive.postValue(tripList)
     }
 
-    fun getTrip(id: UUID): Trip? {
-        return tripList.find { it.id == id }
-    }
-
     fun getAll(): LiveData<List<Trip>> = tripListLive
 }

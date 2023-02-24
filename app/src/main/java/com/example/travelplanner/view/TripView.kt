@@ -7,9 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
 import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.MainViewModel
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 
 @Composable
-fun TripView(navController: NavController, viewModel: MainViewModel, trip: Trip?) {
+fun TripView(navController: NavController, viewModel: MainViewModel, tripJson: String) {
+    val trip = Json.decodeFromString<Trip>(tripJson)
     Scaffold(
         topBar = { TopAppBar() {
             IconButton(onClick = { navController.navigateUp() }) {
@@ -25,7 +28,7 @@ fun TripView(navController: NavController, viewModel: MainViewModel, trip: Trip?
         }
         },
         bottomBar = { BottomAppBar() {
-            Text(trip!!.name)
+            Text(trip.name)
         }
         }
     )

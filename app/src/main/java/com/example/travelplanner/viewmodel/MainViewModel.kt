@@ -16,10 +16,7 @@ class MainViewModel: ViewModel() {
         }
 
     fun addTrip(name: String) {
-        tripList.addTrip(Trip(UUID.randomUUID(), name))
+        tripList.addTrip(Trip(name))
     }
 
-    fun getTrip(id: UUID): Trip? {
-        return tripList.getTrip(id)
-    }
 }

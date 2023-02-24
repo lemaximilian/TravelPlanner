@@ -15,14 +15,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.travelplanner.ui.theme.TravelPlannerTheme
 import com.example.travelplanner.view.NavHostView
-import com.example.travelplanner.viewmodel.TripListViewModel
+import com.example.travelplanner.viewmodel.MainViewModel
 
 class MainActivity : ComponentActivity() {
 
 override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val tripListViewModel by viewModels<TripListViewModel>()
+        val viewModel by viewModels<MainViewModel>()
         setContent {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             TravelPlannerTheme {
@@ -32,8 +32,8 @@ override fun onCreate(savedInstanceState: Bundle?) {
                     color = MaterialTheme.colors.background
                 ) {
                     val navController = rememberNavController()
-                    val tripList by tripListViewModel.getTripList().observeAsState(emptyList())
-                    NavHostView(navController = navController, viewModel = tripListViewModel, tripList = tripList)
+                    val tripList by viewModel.getTripList().observeAsState(emptyList())
+                    NavHostView(navController = navController, viewModel = viewModel, tripList = tripList)
                 }
             }
         }
@@ -46,9 +46,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
 @Composable
 fun DefaultPreview() {
     TravelPlannerTheme {
-        val tripListViewModel = TripListViewModel()
+        val viewModel = MainViewModel()
         val navController = rememberNavController()
-        val tripList by tripListViewModel.getTripList().observeAsState(emptyList())
-        NavHostView(navController = navController, viewModel = tripListViewModel, tripList = tripList)
+        val tripList by viewModel.getTripList().observeAsState(emptyList())
+        NavHostView(navController = navController, viewModel = viewModel, tripList = tripList)
     }
 }

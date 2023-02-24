@@ -17,6 +17,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.MainViewModel
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 @Composable
 fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>) {
@@ -103,8 +105,9 @@ fun TripGrid(navController: NavHostController, viewModel: MainViewModel, tripLis
 }
 
 @Composable
-fun TripCard(navController: NavHostController, trip: Trip){
-    Button(onClick = { navController.navigate("TripView/" + trip.id) },
+fun TripCard(navController: NavHostController, trip: Trip) {
+    val tripJson = Json.encodeToString(trip)
+    Button(onClick = { navController.navigate("TripView/$tripJson") },
         modifier = Modifier
             .height(180.dp)
             .width(180.dp)

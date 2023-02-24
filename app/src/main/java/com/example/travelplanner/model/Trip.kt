@@ -1,5 +1,6 @@
 package com.example.travelplanner.model
 
-import java.util.UUID
+import kotlinx.serialization.Serializable
 
-data class Trip(val id: UUID, val name: String)
+@Serializable
+data class Trip(val name: String)

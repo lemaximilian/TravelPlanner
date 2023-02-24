@@ -18,10 +18,9 @@ fun NavHostView(navController: NavHostController, viewModel: MainViewModel, trip
         composable(BottomNavItem.AddTrip.screen_route) { AddTripView(navController, viewModel) }
         composable(BottomNavItem.Settings.screen_route) { SettingsView(navController) }
         composable("WelcomeView"){ WelcomeView(navController) }
-        composable("TripView/{id}", arguments = listOf(navArgument("id") { type = NavType.StringType})) {
-            val id = it.arguments?.getString("id")
-            val trip = viewModel.getTrip(UUID.fromString(id))
-            TripView(navController, viewModel, trip)
+        composable("TripView/{tripJson}", arguments = listOf(navArgument("tripJson") { type = NavType.StringType})) { backStackEntry ->
+            val tripJson = backStackEntry.arguments?.getString("tripJson")
+            TripView(navController, viewModel, tripJson ?: "")
         }
         composable(BottomNavItem.Map.screen_route) { MapView(navController, viewModel) }
     }
