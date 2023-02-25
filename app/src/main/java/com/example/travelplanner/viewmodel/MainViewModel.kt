@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.map
 import com.example.travelplanner.model.Trip
 import com.example.travelplanner.model.TripList
-import java.util.*
 
 class MainViewModel: ViewModel() {
     private val tripList = TripList()
