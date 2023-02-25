@@ -7,15 +7,20 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import android.widget.Toast
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 
 
 @Composable
@@ -36,66 +41,140 @@ fun SettingsView(navController: NavHostController) {
 
 }
 
+
+
+
 @Composable
 fun ToDoList() {
-    val toDoList = remember { mutableStateListOf<String>()}
-    val (text, setText) = remember { mutableStateOf("") }
+    val db = FirebaseDatabase.getInstance()
+    val ref = remember { db.reference.child("ToDo").child("Items") }
+    val toDoList = remember { mutableStateListOf<String>() }
     val checkedState = remember { mutableStateListOf<Boolean>() }
+    val (isLoaded, setIsLoaded) = remember { mutableStateOf(false) }
+    val (text, setText) = remember { mutableStateOf("") }
+    val context = LocalContext.current
 
-    Column(
-        modifier = Modifier.fillMaxSize()
+    if (!isLoaded) {
+        SideEffect {
+            ref.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    snapshot.children.forEach { item ->
+                        val title = item.child("title").getValue(String::class.java)
+                        val checked = item.child("checked").getValue(Boolean::class.java)
+                        if (title != null && checked != null) {
+                            toDoList.add(title)
+                            checkedState.add(checked)
+                        }
+                    }
+                    setIsLoaded(true)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(context,"Unerwarteter Fehler",Toast.LENGTH_SHORT)
+                }
+            })
+        }
+    }
+
+
+    // Elemente hinzufügen
+    fun addItem(item: String) {
+        if (item.isNotEmpty()) {
+            val key = ref.push().key!!
+            val newItemRef = ref.child(key)
+            newItemRef.child("title").setValue(item)
+            newItemRef.child("checked").setValue(false)
+            toDoList.add(item)
+            checkedState.add(false)
+            Toast.makeText(context,"\"$item\" erfolgreich hinzugefügt",Toast.LENGTH_SHORT).show()
+        }else{
+            Toast.makeText(context,"Ungültige eingabe!",Toast.LENGTH_SHORT).show()
+
+
+        }
+    }
+
+    fun removeItem(item: String) {
+        ref.orderByChild("title").equalTo(item).addListenerForSingleValueEvent(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                for (childSnapshot in snapshot.children) {
+                    childSnapshot.ref.removeValue()
+                }
+                val index = toDoList.indexOf(item)
+                toDoList.removeAt(index)
+                checkedState.removeAt(index)
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(context,"Unerwarteter Fehler",Toast.LENGTH_SHORT)
+            }
+        })
+    }
+
+    Scaffold(
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = { addItem(text); setText("") },
+                modifier = Modifier
+                    .padding(bottom = 56.dp),
+                content = {
+                    Icon(Icons.Filled.Add, contentDescription = "Hinzufügen")
+                    
+                }
+            )
+        }
     ) {
-        Row(
-            modifier = Modifier.padding(16.dp)
-        ) {
-            OutlinedTextField(
+        Column {
+            TextField(
                 value = text,
                 onValueChange = setText,
-                placeholder = { Text("Neues Element") },
-                modifier = Modifier.weight(1f)
+                label = { Text("Aktivität hier hinzufügen") },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth()
             )
-            Spacer(modifier = Modifier.width(8.dp))
-            Button(
-                onClick = {
-                    toDoList.add(text)
-                    checkedState.add(false)
-                    setText("")
-                }
-            ) {
-                Text(text = "Hinzufügen")
-            }
-        }
+            LazyColumn {
+                itemsIndexed(toDoList) { index, item ->
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Checkbox(
+                            checked = checkedState[index],
+                            onCheckedChange = {
+                                checkedState[index] = it
+                                ref.orderByChild("title").equalTo(item).addListenerForSingleValueEvent(object :
+                                    ValueEventListener {
 
-        LazyColumn(
-            modifier = Modifier.fillMaxSize()
-        ) {
-            itemsIndexed(toDoList) { index, item ->
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        for (childSnapshot in snapshot.children) {
+                                            childSnapshot.child("checked").ref.setValue(it)
+                                        }
 
-                ) {
-                    Checkbox(
-                        checked = checkedState[index],
-                        onCheckedChange = { checked ->
-                            checkedState[index] = checked
+                                    }
 
-                        },
-                        modifier = Modifier.size(24.dp)
-                    )
-                    Spacer(modifier = Modifier.width(8.dp))
-                    Text(
-                        text = item,
-                        fontSize = 18.sp,
-                        textDecoration = if (checkedState[index]) TextDecoration.LineThrough else TextDecoration.None,
-                        modifier = Modifier.weight(1f)
-                    )
-                    IconButton(onClick = {
-                        toDoList.remove(item)
-                        checkedState.removeAt(index)
+                                    override fun onCancelled(error: DatabaseError) {
+                                        Toast.makeText(context,"Unerwarteter Fehler",Toast.LENGTH_SHORT)
+                                    }
+                                })
 
-                    }) {
-                        Icon(Icons.Filled.Delete, contentDescription = "Löschen")
+                            }
+
+                        )
+                        Text(
+                            item,
+                            style = MaterialTheme.typography.h5,
+                            modifier = Modifier
+                                .padding(start = 16.dp)
+                                .weight(1f)
+                        )
+                        IconButton(onClick = { removeItem(item) }) {
+                            Icon(Icons.Filled.Delete, contentDescription = "Löschen")
+                        }
+
                     }
                 }
             }
