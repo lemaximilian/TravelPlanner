@@ -65,9 +65,9 @@ private fun Context.buildPlayerView(exoPlayer: ExoPlayer)= StyledPlayerView(this
 
 @Composable
 fun SetName(videoUri: Uri,navController: NavController) {
-    var username by remember { mutableStateOf("") }
     val context = LocalContext.current
     val exoPlayer = remember {context.buildExoPlayer(videoUri)}
+    var username by remember { mutableStateOf("")}
 
 
     
@@ -96,12 +96,10 @@ fun SetName(videoUri: Uri,navController: NavController) {
     {
 
 
-        TextInput(Input.User)
+        TextInput(Input.User, onValueChanged = {username = it})
 
 
-
-
-        Button(onClick = {navController.navigate("Home"){navController.popBackStack()}}, modifier = Modifier
+        Button(onClick = {navController.navigate("Home/$username"){navController.popBackStack()}}, modifier = Modifier
             .padding(vertical = 15.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
@@ -123,13 +121,13 @@ fun SetName(videoUri: Uri,navController: NavController) {
 
 }
 @Composable
-fun TextInput(Input: Input){
+fun TextInput(Input: Input, onValueChanged: (String) -> Unit){
 
         var value by remember { mutableStateOf("") }
 
 
       TextField(
-            value = value, onValueChange = { value = it },
+            value = value, onValueChange = { value = it ; onValueChanged(it) },
                 Modifier
               .fillMaxWidth()
               .clip(RoundedCornerShape(20.dp)
@@ -158,6 +156,8 @@ fun TextInput(Input: Input){
 
 
           )}
+
+
 
 
 

@@ -1,5 +1,6 @@
 package com.example.travelplanner
 
+import android.app.Application
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -11,20 +12,24 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.travelplanner.ui.theme.TravelPlannerTheme
 import com.example.travelplanner.view.NavHostView
 import com.example.travelplanner.viewmodel.MainViewModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+
 
 class MainActivity : ComponentActivity() {
 
 override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val viewModel by viewModels<MainViewModel>()
         setContent {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             TravelPlannerTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -32,6 +37,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
                     color = MaterialTheme.colors.background
                 ) {
                     val navController = rememberNavController()
+                    val tripList by viewModel.getTripList().observeAsState(emptyList())
                     NavHostView(navController = navController)
                 }
             }
@@ -45,7 +51,9 @@ override fun onCreate(savedInstanceState: Bundle?) {
 @Composable
 fun DefaultPreview() {
     TravelPlannerTheme {
+        val viewModel = MainViewModel(app = Application())
         val navController = rememberNavController()
+        val tripList by viewModel.getTripList().observeAsState(emptyList())
         NavHostView(navController = navController)
     }
 }

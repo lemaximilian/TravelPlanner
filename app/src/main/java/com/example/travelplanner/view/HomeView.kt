@@ -1,15 +1,16 @@
 package com.example.travelplanner.view
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -17,16 +18,29 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.MainViewModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.*
 
+
+
+
+
+
 @Composable
 fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>) {
+
+
+
     Scaffold(
         topBar = {
             TopAppBar() {
-                Text("TravelPlanner")
+                Text("Travelplanner")
+             
             }
         },
         bottomBar = {
@@ -39,6 +53,9 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripLis
             FloatingActionButton(onClick = { openDialog.value = true }) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add")
             }
+
+
+
 
             if(openDialog.value) {
                 AlertDialog(
@@ -91,14 +108,34 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripLis
 
 @Composable
 fun TripGrid(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>, padding: PaddingValues) {
+    val username = navController.currentBackStackEntry!!.arguments!!.getString("username")
     LazyVerticalGrid(columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = Modifier.padding(padding)
     ) {
         header {
-            Text("Ihre Reisen", fontWeight = FontWeight.Bold, modifier = Modifier.padding(PaddingValues(horizontal = 8.dp)))
+
+
+            Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(text = "Wilkommen, $username", fontWeight = FontWeight.Bold)
+            }
+            Column(
+                horizontalAlignment = Alignment.Start,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    "Ihre Reisen",
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(PaddingValues(horizontal = 8.dp))
+                )
+            }
         }
+
+
         items(tripList) { trip ->
             TripCard(navController, trip)
         }

@@ -1,6 +1,8 @@
 package com.example.travelplanner.viewmodel
 
 import android.app.Application
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.*
 import com.example.travelplanner.data.AppDatabase
@@ -12,6 +14,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class MainViewModel(app: Application): AndroidViewModel(app) {
+    val username by mutableStateOf("")
 
     class Factory(private val app: Application): ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
@@ -19,6 +22,7 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
             return MainViewModel(app) as T
         }
     }
+
 
     val readAllData: LiveData<List<Trip>>
     private val repository: TripRepository
