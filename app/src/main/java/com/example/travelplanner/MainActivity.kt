@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.rememberNavController
 import com.example.travelplanner.ui.theme.TravelPlannerTheme
@@ -22,7 +23,6 @@ class MainActivity : ComponentActivity() {
 override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModel by viewModels<MainViewModel>()
         setContent {
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
             TravelPlannerTheme {
@@ -32,8 +32,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
                     color = MaterialTheme.colors.background
                 ) {
                     val navController = rememberNavController()
-                    val tripList by viewModel.getTripList().observeAsState(emptyList())
-                    NavHostView(navController = navController, viewModel = viewModel, tripList = tripList)
+                    NavHostView(navController = navController)
                 }
             }
         }
@@ -46,9 +45,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 @Composable
 fun DefaultPreview() {
     TravelPlannerTheme {
-        val viewModel = MainViewModel()
         val navController = rememberNavController()
-        val tripList by viewModel.getTripList().observeAsState(emptyList())
-        NavHostView(navController = navController, viewModel = viewModel, tripList = tripList)
+        NavHostView(navController = navController)
     }
 }

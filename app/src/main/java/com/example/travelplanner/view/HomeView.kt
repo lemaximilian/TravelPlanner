@@ -19,6 +19,7 @@ import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.MainViewModel
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import java.util.*
 
 @Composable
 fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>) {
@@ -57,7 +58,7 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripLis
                     },
                     confirmButton = {
                         Button(onClick = {
-                            viewModel.addTrip(textState.value.text)
+                            viewModel.addTrip(Trip(UUID.randomUUID(), textState.value.text))
                             openDialog.value = false
                         }) {
                             Text("Erstellen")

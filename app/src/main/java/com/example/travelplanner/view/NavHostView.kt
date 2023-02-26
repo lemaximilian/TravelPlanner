@@ -1,18 +1,24 @@
 package com.example.travelplanner.view
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.travelplanner.model.BottomNavItem
-import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.MainViewModel
-import java.util.*
+
 
 @Composable
-fun NavHostView(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>) {
+fun NavHostView(navController: NavHostController) {
+    val context = LocalContext.current
+    val viewModel: MainViewModel = viewModel()
+    val tripList = viewModel.readAllData.observeAsState(listOf()).value
+
     NavHost(navController = navController, startDestination = "WelcomeView") {
         composable(BottomNavItem.Main.screen_route) { HomeView(navController, viewModel, tripList) }
         composable(BottomNavItem.AddTrip.screen_route) { AddTripView(navController, viewModel) }

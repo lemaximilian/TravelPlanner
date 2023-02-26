@@ -19,7 +19,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import android.widget.Toast
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 
@@ -36,7 +35,7 @@ fun SettingsView(navController: NavHostController) {
         }
     ) { padding ->
        Text(text = "SettingsView", modifier = Modifier.padding(padding))
-    ToDoList()
+       ToDoList()
    }
 
 }
