@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,6 +14,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -99,7 +101,7 @@ fun SetName(videoUri: Uri,navController: NavController) {
         TextInput(Input.User, onValueChanged = {username = it})
 
 
-        Button(onClick = {navController.navigate("Home/$username"){navController.popBackStack()}}, modifier = Modifier
+        Button(onClick = {if (username.isBlank()){Toast.makeText(context,"Eingabe darf nicht leer sein!",Toast.LENGTH_SHORT).show()}else{;navController.navigate("Home/$username"){navController.popBackStack()}}}, modifier = Modifier
             .padding(vertical = 15.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
@@ -122,13 +124,13 @@ fun SetName(videoUri: Uri,navController: NavController) {
 }
 @Composable
 fun TextInput(Input: Input, onValueChanged: (String) -> Unit){
-
+        var text by rememberSaveable { mutableStateOf("") }
         var value by remember { mutableStateOf("") }
 
 
       TextField(
-            value = value, onValueChange = { value = it ; onValueChanged(it) },
-                Modifier
+            value = value, onValueChange = { value = it ; onValueChanged(it)},
+          Modifier
               .fillMaxWidth()
               .clip(RoundedCornerShape(20.dp)
 
