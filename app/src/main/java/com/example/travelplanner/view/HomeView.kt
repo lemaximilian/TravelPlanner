@@ -26,21 +26,12 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.*
 
-
-
-
-
-
 @Composable
 fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>) {
-
-
-
     Scaffold(
         topBar = {
             TopAppBar() {
                 Text("Travelplanner")
-             
             }
         },
         bottomBar = {
@@ -112,8 +103,6 @@ fun TripGrid(navController: NavHostController, viewModel: MainViewModel, tripLis
         modifier = Modifier.padding(padding)
     ) {
         header {
-
-
             Column(
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center

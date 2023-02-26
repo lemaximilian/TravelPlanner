@@ -1,17 +1,19 @@
 package com.example.travelplanner.view
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -34,10 +36,6 @@ fun TripView(navController: NavController, viewModel: MainViewModel, tripJson: S
         content = { padding ->
             TripContent(navController, viewModel, trip)
         },
-        floatingActionButton = { FloatingActionButton(onClick = {}) {
-            Text("X")
-        }
-        },
         bottomBar = { BottomAppBar() {
             Text(trip.name)
         }
@@ -48,10 +46,27 @@ fun TripView(navController: NavController, viewModel: MainViewModel, tripJson: S
 @Composable
 fun TripContent(navController: NavController, viewModel: MainViewModel, trip: Trip) {
     LazyColumn(
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
+        modifier = Modifier.fillMaxWidth(),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
             TripHeaderAndDelete(navController, viewModel, trip)
+        }
+        item {
+            TripStartDestinationSection()
+        }
+        item {
+            TripTravelerSection()
+        }
+        item {
+            TripTravelerSection()
+        }
+        item {
+            TripTravelerSection()
+        }
+        item {
+            TripTravelerSection()
         }
     }
 }
@@ -67,6 +82,61 @@ fun TripHeaderAndDelete(navController: NavController, viewModel: MainViewModel, 
         }) {
             Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete", tint = Color.Red)
         }
+    }
+}
+
+@Composable
+fun TripSection() {
+    SectionBox(shape = RoundedCornerShape(10.dp))
+}
+
+@Composable
+fun SectionBox(shape: Shape) {
+    Column(modifier = Modifier
+        .fillMaxWidth()
+        .wrapContentSize(Alignment.Center)) {
+        Box(
+            modifier = Modifier
+                .height(200.dp)
+                .fillMaxWidth()
+                .clip(shape)
+                .background(Color.Blue)
+
+        )
+    }
+}
+
+@Composable
+fun TripStartDestinationContent() {
+    Text("Start und Ziel der Reise",
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.padding(8.dp),
+        color = Color.White
+    )
+}
+
+@Composable
+fun TripTravelerContent() {
+    Text("Reisende(r)",
+        fontWeight = FontWeight.Bold,
+        modifier = Modifier.padding(8.dp),
+        color = Color.White
+    )
+}
+
+@Composable
+fun TripStartDestinationSection() {
+    Box {
+        TripSection()
+        TripStartDestinationContent()
+    }
+}
+
+@Composable
+fun TripTravelerSection() {
+    Box {
+        TripSection()
+        TripTravelerContent()
     }
 }
 
