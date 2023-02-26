@@ -54,9 +54,6 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripLis
                 Icon(imageVector = Icons.Filled.Add, contentDescription = "Add")
             }
 
-
-
-
             if(openDialog.value) {
                 AlertDialog(
                     onDismissRequest = { openDialog.value = false },

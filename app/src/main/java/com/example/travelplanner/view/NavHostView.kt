@@ -1,5 +1,6 @@
 package com.example.travelplanner.view
 
+import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
@@ -16,7 +17,9 @@ import com.example.travelplanner.viewmodel.MainViewModel
 @Composable
 fun NavHostView(navController: NavHostController) {
     val context = LocalContext.current
-    val viewModel: MainViewModel = viewModel()
+    val viewModel: MainViewModel = viewModel(
+        factory = MainViewModel.Factory(context.applicationContext as Application)
+    )
     val tripList = viewModel.readAllData.observeAsState(listOf()).value
 
     NavHost(navController = navController, startDestination = "WelcomeView") {
