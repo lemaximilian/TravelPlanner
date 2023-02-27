@@ -23,13 +23,11 @@ fun NavHostView(navController: NavHostController) {
     val tripList = viewModel.readAllData.observeAsState(listOf()).value
 
     NavHost(navController = navController, startDestination = "WelcomeView") {
-        composable(BottomNavItem.Main.screen_route, arguments = listOf(navArgument("userName") { type = NavType.StringType })) { backStackEntry ->
-            val userName = backStackEntry.arguments?.getString("userName")
-            HomeView(navController, viewModel, userName ?: "", tripList)
+        composable(BottomNavItem.Main.screen_route) { HomeView(navController, viewModel, tripList)
         }
         composable(BottomNavItem.AddTrip.screen_route) { AddTripView(navController, viewModel) }
         composable(BottomNavItem.Settings.screen_route) { SettingsView(navController) }
-        composable("WelcomeView"){ WelcomeView(navController) }
+        composable("WelcomeView"){ WelcomeView(navController, viewModel) }
         composable("TripView/{tripJson}", arguments = listOf(navArgument("tripJson") { type = NavType.StringType })) { backStackEntry ->
             val tripJson = backStackEntry.arguments?.getString("tripJson")
             TripView(navController, viewModel, tripJson ?: "")

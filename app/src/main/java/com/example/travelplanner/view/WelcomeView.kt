@@ -1,6 +1,7 @@
 package com.example.travelplanner.view
 
 
+import android.app.Application
 import android.content.Context
 import android.net.Uri
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
@@ -28,17 +29,20 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.navigation.NavController
 import com.example.travelplanner.R
 import com.example.travelplanner.ui.theme.Shapes
+import com.example.travelplanner.viewmodel.MainViewModel
 import com.google.android.exoplayer2.ExoPlayer
 import com.google.android.exoplayer2.MediaItem
 import com.google.android.exoplayer2.Player
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout.RESIZE_MODE_ZOOM
 import com.google.android.exoplayer2.ui.StyledPlayerView
-
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.util.*
 
 @Composable
-fun WelcomeView(navController: NavController){
-
-    SetName(getVideoUri(),navController)
+fun WelcomeView(navController: NavController, viewModel: MainViewModel){
+    SetName(getVideoUri(), navController, viewModel)
 
 }
 
@@ -66,7 +70,7 @@ private fun Context.buildPlayerView(exoPlayer: ExoPlayer)= StyledPlayerView(this
 
 
 @Composable
-fun SetName(videoUri: Uri,navController: NavController) {
+fun SetName(videoUri: Uri,navController: NavController, viewModel: MainViewModel) {
     val context = LocalContext.current
     val exoPlayer = remember {context.buildExoPlayer(videoUri)}
     var username by remember { mutableStateOf("")}
@@ -99,7 +103,15 @@ fun SetName(videoUri: Uri,navController: NavController) {
         TextInput(Input.User, onValueChanged = {username = it})
 
 
-        Button(onClick = {if(username.isBlank()){Toast.makeText(context,"Eingabe darf nicht leer sein!",Toast.LENGTH_SHORT).show()}else{;navController.navigate("Home/$username"){navController.popBackStack()}}}, modifier = Modifier
+        Button(onClick = {
+            if(username.isBlank()) {
+                Toast.makeText(context,"Eingabe darf nicht leer sein!",Toast.LENGTH_SHORT).show()
+            } else {
+                CoroutineScope(Dispatchers.IO).launch {
+                    viewModel.setUserName(username)
+                }
+                navController.navigate("home")
+            }}, modifier = Modifier
             .padding(vertical = 15.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))

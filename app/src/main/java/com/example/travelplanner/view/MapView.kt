@@ -34,10 +34,6 @@ fun MapView(navController: NavController, viewModel: MainViewModel) {
 
             }
         },
-        floatingActionButton = { FloatingActionButton(onClick = {}) {
-            Text("X")
-        }
-        },
         bottomBar = { BottomAppBar() {
             Text("Das ist eine MapDemo")
         }

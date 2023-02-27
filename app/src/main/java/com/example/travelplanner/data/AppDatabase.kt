@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.travelplanner.model.Trip
 
-@Database(entities = [Trip::class], version = 1, exportSchema = false)
+@Database(entities = [Trip::class], version = 5, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun TripDao(): TripDao
 

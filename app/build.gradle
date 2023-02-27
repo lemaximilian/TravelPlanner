@@ -56,6 +56,7 @@ dependencies {
     def nav_version = "2.5.3"
     def room_version = "2.5.0"
 
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
     implementation "android.arch.lifecycle:extensions:1.1.1"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor("androidx.room:room-compiler:$room_version")

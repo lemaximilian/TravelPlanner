@@ -19,5 +19,12 @@ data class Trip(
     val id: UUID,
 
     @ColumnInfo(name = "name")
-    val name: String
+    val name: String,
+
+    @ColumnInfo(name = "start")
+    val start: String?,
+
+    @ColumnInfo(name = "destination")
+    val destination: String?
+
 )

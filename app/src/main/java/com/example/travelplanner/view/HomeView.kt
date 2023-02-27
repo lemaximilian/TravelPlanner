@@ -1,5 +1,6 @@
 package com.example.travelplanner.view
 
+import android.app.Application
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
@@ -28,7 +29,7 @@ import kotlinx.serialization.json.Json
 import java.util.*
 
 @Composable
-fun HomeView(navController: NavHostController, viewModel: MainViewModel, userName: String, tripList: List<Trip>) {
+fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>) {
     Scaffold(
         topBar = {
             TopAppBar() {
@@ -64,7 +65,7 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, userNam
                     },
                     confirmButton = {
                         Button(onClick = {
-                            viewModel.addTrip(Trip(UUID.randomUUID(), textState.value.text))
+                            viewModel.addTrip(Trip(UUID.randomUUID(), textState.value.text, null, null))
                             openDialog.value = false
                         }) {
                             Text("Erstellen")
@@ -81,7 +82,7 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, userNam
     ) { padding ->
         Column {
             Text(
-                "Willkommen, $userName",
+                "Willkommen, ${viewModel.getUserName.collectAsState("").value}",
                 fontWeight = FontWeight.Bold,
                 fontSize = 30.sp,
                 modifier = Modifier.padding(PaddingValues(horizontal = 8.dp))
@@ -96,13 +97,13 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, userNam
                 }
             }
             else
-                TripGrid(navController, viewModel, userName, tripList, padding)
+                TripGrid(navController, viewModel, tripList, padding)
         }
     }
 }
 
 @Composable
-fun TripGrid(navController: NavHostController, viewModel: MainViewModel, userName: String, tripList: List<Trip>, padding: PaddingValues) {
+fun TripGrid(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>, padding: PaddingValues) {
     LazyVerticalGrid(columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
