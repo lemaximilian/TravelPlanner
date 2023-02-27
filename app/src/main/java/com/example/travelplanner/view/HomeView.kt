@@ -80,6 +80,12 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, userNam
         }
     ) { padding ->
         Column {
+            Text(
+                "Willkommen, $userName",
+                fontWeight = FontWeight.Bold,
+                fontSize = 30.sp,
+                modifier = Modifier.padding(PaddingValues(horizontal = 8.dp))
+            )
             if(tripList.isEmpty()) {
                 Column(
                     modifier = Modifier.fillMaxSize(),
@@ -107,12 +113,6 @@ fun TripGrid(navController: NavHostController, viewModel: MainViewModel, userNam
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(
-                    "Willkommen, $userName",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 30.sp,
-                    modifier = Modifier.padding(PaddingValues(horizontal = 8.dp))
-                )
                 Text(
                     "Ihre Reisen",
                     fontWeight = FontWeight.Bold,

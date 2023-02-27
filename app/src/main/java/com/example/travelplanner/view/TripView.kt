@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.Composable
@@ -108,11 +109,19 @@ fun SectionBox(shape: Shape) {
 
 @Composable
 fun TripStartDestinationContent() {
-    Text("Start und Ziel der Reise",
-        fontWeight = FontWeight.Bold,
-        modifier = Modifier.padding(8.dp),
-        color = Color.White
-    )
+    Row {
+        Text("Start und Ziel der Reise",
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp,
+            modifier = Modifier.padding(8.dp),
+            color = Color.White
+        )
+        IconButton(onClick = {
+
+        }) {
+            Icon(imageVector = Icons.Filled.Add, contentDescription = "Add", tint = Color.White)
+        }
+    }
 }
 
 @Composable
