@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.MainViewModel
@@ -106,7 +107,12 @@ fun TripGrid(navController: NavHostController, viewModel: MainViewModel, userNam
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = "Wilkommen, $userName", fontWeight = FontWeight.Bold)
+                Text(
+                    "Willkommen, $userName",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 30.sp,
+                    modifier = Modifier.padding(PaddingValues(horizontal = 8.dp))
+                )
                 Text(
                     "Ihre Reisen",
                     fontWeight = FontWeight.Bold,
