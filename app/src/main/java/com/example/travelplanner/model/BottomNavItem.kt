@@ -8,7 +8,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.ui.graphics.vector.ImageVector
 
 sealed class BottomNavItem(var title: String, var icon: ImageVector, var screen_route: String) {
-    object Main: BottomNavItem("Home", Icons.Filled.Home,"home/{username}")
+    object Main: BottomNavItem("Home", Icons.Filled.Home,"home/{userName}")
     object AddTrip: BottomNavItem("Reise hinzufügen",Icons.Filled.Add,"add")
     object Settings: BottomNavItem("Einstellungen",Icons.Filled.Settings,"settings")
     object Map: BottomNavItem("Map", Icons.Filled.LocationOn, "map")

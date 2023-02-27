@@ -27,7 +27,7 @@ import kotlinx.serialization.json.Json
 import java.util.*
 
 @Composable
-fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>) {
+fun HomeView(navController: NavHostController, viewModel: MainViewModel, userName: String, tripList: List<Trip>) {
     Scaffold(
         topBar = {
             TopAppBar() {
@@ -89,14 +89,13 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripLis
                 }
             }
             else
-                TripGrid(navController, viewModel, tripList, padding)
+                TripGrid(navController, viewModel, userName, tripList, padding)
         }
     }
 }
 
 @Composable
-fun TripGrid(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>, padding: PaddingValues) {
-    val username = navController.currentBackStackEntry!!.arguments!!.getString("username")
+fun TripGrid(navController: NavHostController, viewModel: MainViewModel, userName: String, tripList: List<Trip>, padding: PaddingValues) {
     LazyVerticalGrid(columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -107,12 +106,7 @@ fun TripGrid(navController: NavHostController, viewModel: MainViewModel, tripLis
                 horizontalAlignment = Alignment.Start,
                 verticalArrangement = Arrangement.Center
             ) {
-                Text(text = "Wilkommen, $username", fontWeight = FontWeight.Bold)
-            }
-            Column(
-                horizontalAlignment = Alignment.Start,
-                verticalArrangement = Arrangement.Center
-            ) {
+                Text(text = "Wilkommen, $userName", fontWeight = FontWeight.Bold)
                 Text(
                     "Ihre Reisen",
                     fontWeight = FontWeight.Bold,
@@ -120,8 +114,6 @@ fun TripGrid(navController: NavHostController, viewModel: MainViewModel, tripLis
                 )
             }
         }
-
-
         items(tripList) { trip ->
             TripCard(navController, trip)
         }

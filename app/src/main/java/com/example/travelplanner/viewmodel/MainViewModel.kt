@@ -63,8 +63,4 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
             it.toMutableStateList()
         }
 
-    fun addTrip(name: String) {
-        tripList.addTrip(Trip(UUID.randomUUID(), name))
-    }
-
 }

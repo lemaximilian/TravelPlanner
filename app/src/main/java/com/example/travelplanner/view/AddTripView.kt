@@ -34,7 +34,7 @@ fun AddTripView(navController: NavHostController, viewModel: MainViewModel) {
             })
             Text("Die Reise hat folgenden Namen: " + textState.value.text)
             Button(onClick = {
-                viewModel.addTrip(textState.value.text)
+                //viewModel.addTrip(textState.value.text)
             }) {
                 Text("Reise hinzufügen")
             }

@@ -71,8 +71,6 @@ fun SetName(videoUri: Uri,navController: NavController) {
     val exoPlayer = remember {context.buildExoPlayer(videoUri)}
     var username by remember { mutableStateOf("")}
 
-
-    
     DisposableEffect(
         AndroidView(factory ={it.buildPlayerView(exoPlayer)},
             modifier = Modifier.fillMaxSize()
@@ -101,7 +99,7 @@ fun SetName(videoUri: Uri,navController: NavController) {
         TextInput(Input.User, onValueChanged = {username = it})
 
 
-        Button(onClick = {if (username.isBlank()){Toast.makeText(context,"Eingabe darf nicht leer sein!",Toast.LENGTH_SHORT).show()}else{;navController.navigate("Home/$username"){navController.popBackStack()}}}, modifier = Modifier
+        Button(onClick = {if(username.isBlank()){Toast.makeText(context,"Eingabe darf nicht leer sein!",Toast.LENGTH_SHORT).show()}else{;navController.navigate("Home/$username"){navController.popBackStack()}}}, modifier = Modifier
             .padding(vertical = 15.dp)
             .fillMaxWidth()
             .clip(RoundedCornerShape(20.dp))
