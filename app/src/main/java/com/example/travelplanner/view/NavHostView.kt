@@ -47,7 +47,7 @@ fun NavHostView(navController: NavHostController) {
         }
         composable("ToDoView/{tripJson}", arguments = listOf(navArgument("tripJson") { type = NavType.StringType })) { backStackEntry ->
             val tripJson = backStackEntry.arguments?.getString("tripJson")
-            ToDoView(navController, tripJson ?: "")
+            ToDoView(navController, tripJson ?: "",todoview)
         }
     }
 }

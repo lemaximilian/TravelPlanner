@@ -22,7 +22,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
 
         setContent {
             TravelPlannerTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
