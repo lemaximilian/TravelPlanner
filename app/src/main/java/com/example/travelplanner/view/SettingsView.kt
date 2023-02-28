@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import android.widget.Toast
+import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewModelScope
@@ -51,10 +52,10 @@ fun SettingsView(navController: NavHostController, todoViewModel: TodoViewModel)
     ) { padding ->
        Text(text = "SettingsView", modifier = Modifier.padding(padding))
 
+
    }
 
 }
-
 
 
 

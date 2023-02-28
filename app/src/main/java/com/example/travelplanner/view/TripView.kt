@@ -265,7 +265,7 @@ fun ExpensesContent(navController: NavController, expensesViewModel: ExpensesVie
     Column {
         ExpensesButton(navController, trip)
         Text(
-            "Derzeitige Gesamtkosten der Reise: ",
+            "Die derzeitigen Gesamtkosten der Reise betragen: ",
             color = Color.White,
             modifier = Modifier.padding(8.dp)
         )
@@ -350,7 +350,8 @@ fun ToDoContent(navController: NavController, todoview: TodoViewModel, trip: Tri
             } else {
                 var openTasks = todoList.size - totalChecked
                 Text(
-                    "Es sind noch $openTasks Aufgaben offen",
+                    if (openTasks>1){
+                    "Es sind noch $openTasks Aufgaben offen."}else{"Es ist noch eine Aufgabe offen."},
                     color = Color.White,
                     modifier = Modifier.padding(8.dp)
                 )
