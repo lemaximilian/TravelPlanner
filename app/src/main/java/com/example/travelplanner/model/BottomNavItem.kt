@@ -10,5 +10,4 @@ import androidx.compose.ui.graphics.vector.ImageVector
 sealed class BottomNavItem(var title: String, var icon: ImageVector, var screen_route: String) {
     object Main: BottomNavItem("Home", Icons.Filled.Home,"home")
     object Settings: BottomNavItem("Einstellungen",Icons.Filled.Settings,"settings")
-    object Map: BottomNavItem("Map", Icons.Filled.LocationOn, "map")
 }

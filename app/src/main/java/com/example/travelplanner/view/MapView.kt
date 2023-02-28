@@ -2,9 +2,11 @@ package com.example.travelplanner.view
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavHostController
+import androidx.navigation.NavController
 import com.example.travelplanner.viewmodel.MainViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -12,13 +14,18 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
-fun MapView(navController: NavHostController, viewModel: MainViewModel) {
+fun MapView(navController: NavController, viewModel: MainViewModel) {
     Scaffold(
         topBar = { TopAppBar() {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween
+                horizontalArrangement = Arrangement.SpaceEvenly
             ) {
+                IconButton(onClick = {
+                    navController.navigateUp()
+                }) {
+                    Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+                }
                 Spacer(modifier = Modifier)
                 Text("MapsDemo")
                 Spacer(modifier = Modifier)
@@ -33,12 +40,10 @@ fun MapView(navController: NavHostController, viewModel: MainViewModel) {
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState
-            ) {
-
-            }
+            )
         },
         bottomBar = { BottomAppBar() {
-            BottomNavigation(navController = navController)
+            Text("GoogleMaps")
         }
         }
     )

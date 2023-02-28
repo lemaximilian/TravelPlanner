@@ -20,8 +20,7 @@ import com.example.travelplanner.model.BottomNavItem
 fun BottomNavigation(navController: NavHostController) {
     val items = listOf(
         BottomNavItem.Main,
-        BottomNavItem.Settings,
-        BottomNavItem.Map
+        BottomNavItem.Settings
     )
     BottomNavigation(
         backgroundColor = Color.Blue,

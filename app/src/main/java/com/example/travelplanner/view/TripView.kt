@@ -7,9 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +30,10 @@ import com.example.travelplanner.viewmodel.ExpensesViewModel
 import com.example.travelplanner.viewmodel.MainViewModel
 import com.example.travelplanner.viewmodel.TodoViewModel
 import com.example.travelplanner.viewmodel.TravelerViewModel
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.rememberCameraPositionState
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -47,7 +49,7 @@ fun TripView(navController: NavController, viewModel: MainViewModel, travelerVie
         }
         },
         content = { padding ->
-            TripContent(navController, viewModel, travelerViewModel, expensesViewModel, todoview, trip)
+            TripContent(navController, viewModel, travelerViewModel, expensesViewModel, todoview, trip, padding)
         },
         bottomBar = { BottomAppBar() {
             Text(trip.name)
@@ -57,10 +59,12 @@ fun TripView(navController: NavController, viewModel: MainViewModel, travelerVie
 }
 
 @Composable
-fun TripContent(navController: NavController, viewModel: MainViewModel, travelerViewModel: TravelerViewModel, expensesViewModel: ExpensesViewModel, todoview: TodoViewModel, trip: Trip) {
+fun TripContent(navController: NavController, viewModel: MainViewModel, travelerViewModel: TravelerViewModel, expensesViewModel: ExpensesViewModel, todoview: TodoViewModel, trip: Trip, padding: PaddingValues) {
     LazyColumn(
-        modifier = Modifier.fillMaxWidth(),
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(padding),
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
@@ -79,21 +83,26 @@ fun TripContent(navController: NavController, viewModel: MainViewModel, traveler
             ToDoSection(navController, todoview, trip)
         }
         item {
-            PlaceholderSection()
+            MapSection(navController, trip)
+        }
+        item {
+            PhotoSection(navController, trip)
         }
     }
 }
 
 @Composable
 fun HeaderAndDelete(navController: NavController, viewModel: MainViewModel, trip: Trip) {
-    Row {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         Text(text = trip.name, fontWeight = FontWeight.Bold, fontSize = 50.sp)
-        Spacer(modifier = Modifier.padding(horizontal = 120.dp))
         IconButton(onClick = {
             navController.navigateUp()
             viewModel.deleteTrip(trip)
         }) {
-            Icon(imageVector = Icons.Filled.Delete, contentDescription = "Delete", tint = Color.Red)
+            Icon(modifier = Modifier.padding(vertical = 26.dp), imageVector = Icons.Filled.Delete, contentDescription = "Delete", tint = Color.Red)
         }
     }
 }
@@ -383,6 +392,69 @@ fun ToDoButton(navController: NavController, trip: Trip) {
 }
 
 @Composable
+fun MapContent(navController: NavController, trip: Trip) {
+    Column {
+        MapHeader(navController)
+
+    }
+}
+
+@Composable
+fun MapHeader(navController: NavController) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text("Karte (Work in Progress)",
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp,
+            modifier = Modifier.padding(8.dp),
+            color = Color.White
+        )
+        IconButton(onClick = {
+            //navController.navigate("MapView")
+        }) {
+            Icon(imageVector = Icons.Filled.Add, contentDescription = "Add", tint = Color.White)
+        }
+    }
+}
+
+@Composable
+fun PhotoContent(navController: NavController, trip: Trip) {
+    Column {
+        PhotoButton(navController, trip)
+
+    }
+}
+
+@Composable
+fun PhotoButton(navController: NavController, trip: Trip) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text("Fotos",
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp,
+            modifier = Modifier.padding(8.dp),
+            color = Color.White
+        )
+        Row {
+            IconButton(onClick = {
+                //navController.navigate("PhotoView")
+            }) {
+                Icon(imageVector = Icons.Filled.CameraAlt, contentDescription = "TakePhoto", tint = Color.White)
+            }
+            IconButton(onClick = {
+                //navController.navigate("PhotoView")
+            }) {
+                Icon(imageVector = Icons.Filled.Collections, contentDescription = "Gallery", tint = Color.White)
+            }
+        }
+    }
+}
+
+@Composable
 fun StartDestinationSection(viewModel: MainViewModel, trip: Trip) {
     Box {
         Section()
@@ -415,9 +487,18 @@ fun ToDoSection(navController: NavController, todoview: TodoViewModel, trip: Tri
 }
 
 @Composable
-fun PlaceholderSection() {
+fun MapSection(navController: NavController, trip: Trip) {
     Box {
         Section()
+        MapContent(navController, trip)
+    }
+}
+
+@Composable
+fun PhotoSection(navController: NavController, trip: Trip) {
+    Box {
+        Section()
+        PhotoContent(navController, trip)
     }
 }
 
