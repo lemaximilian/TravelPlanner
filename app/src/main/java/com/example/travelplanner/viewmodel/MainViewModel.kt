@@ -6,6 +6,7 @@ import androidx.compose.runtime.toMutableStateList
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.*
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.travelplanner.data.AppDatabase
 import com.example.travelplanner.data.TripRepository
 import com.example.travelplanner.model.Trip
@@ -22,6 +23,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore("user_preferences")
+
 
 class MainViewModel(app: Application): AndroidViewModel(app) {
 
