@@ -26,5 +26,3 @@ class TripRepository(private val tripDao: TripDao) {
         tripDao.deleteAll()
     }
 }
-
-

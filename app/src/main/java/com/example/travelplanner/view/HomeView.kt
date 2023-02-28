@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -19,6 +20,10 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.MainViewModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.*
@@ -137,7 +142,7 @@ fun TripCard(navController: NavHostController, trip: Trip) {
     ) {
         Text(
             trip.name,
-            fontSize = 16.sp
+            fontSize = 20.sp
         )
     }
 }
