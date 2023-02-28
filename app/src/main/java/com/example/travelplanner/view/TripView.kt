@@ -1,5 +1,6 @@
 package com.example.travelplanner.view
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -26,12 +28,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.MainViewModel
+import com.example.travelplanner.viewmodel.TravelerViewModel
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Composable
-fun TripView(navController: NavController, viewModel: MainViewModel, tripJson: String) {
+fun TripView(navController: NavController, viewModel: MainViewModel, travelerViewModel: TravelerViewModel, tripJson: String) {
     val trip = Json.decodeFromString<Trip>(tripJson)
     Scaffold(
         topBar = { TopAppBar() {
@@ -41,7 +44,7 @@ fun TripView(navController: NavController, viewModel: MainViewModel, tripJson: S
         }
         },
         content = { padding ->
-            TripContent(navController, viewModel, trip)
+            TripContent(navController, viewModel, travelerViewModel, trip)
         },
         bottomBar = { BottomAppBar() {
             Text(trip.name)
@@ -51,7 +54,7 @@ fun TripView(navController: NavController, viewModel: MainViewModel, tripJson: S
 }
 
 @Composable
-fun TripContent(navController: NavController, viewModel: MainViewModel, trip: Trip) {
+fun TripContent(navController: NavController, viewModel: MainViewModel, travelerViewModel: TravelerViewModel, trip: Trip) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -64,7 +67,7 @@ fun TripContent(navController: NavController, viewModel: MainViewModel, trip: Tr
             TripStartDestinationSection(viewModel, trip)
         }
         item {
-            TripTravelerSection(navController, viewModel, trip)
+            TripTravelerSection(navController, travelerViewModel, trip)
         }
     }
 }
@@ -135,6 +138,7 @@ fun TripStartDestinationContent(viewModel: MainViewModel, trip: Trip) {
 
 @Composable
 fun TripStartDestinationButton(viewModel: MainViewModel, trip: Trip) {
+    val context = LocalContext.current
     val openDialog = remember { mutableStateOf(false) }
     val textStateStart = remember { mutableStateOf(TextFieldValue()) }
     val textStateDestination = remember { mutableStateOf(TextFieldValue()) }
@@ -183,10 +187,14 @@ fun TripStartDestinationButton(viewModel: MainViewModel, trip: Trip) {
                 },
                 confirmButton = {
                     Button(onClick = {
-                        viewModel.updateTrip(Trip(trip.id, trip.name, textStateStart.value.text, textStateDestination.value.text))
-                        openDialog.value = false
-                        textStateStart.value = TextFieldValue("")
-                        textStateDestination.value = TextFieldValue("")
+                        if(textStateStart.value.text.isNotEmpty() || textStateDestination.value.text.isNotEmpty()) {
+                            viewModel.updateTrip(Trip(trip.id, trip.name, textStateStart.value.text, textStateDestination.value.text))
+                            openDialog.value = false
+                            textStateStart.value = TextFieldValue("")
+                            textStateDestination.value = TextFieldValue("")
+                        } else {
+                            Toast.makeText(context,"Ungültige Eingabe!", Toast.LENGTH_SHORT).show()
+                        }
                     }) {
                         Text("Hinzufügen")
                     }
@@ -202,12 +210,12 @@ fun TripStartDestinationButton(viewModel: MainViewModel, trip: Trip) {
 }
 
 @Composable
-fun TripTravelerContent(navController: NavController, viewModel: MainViewModel, trip: Trip) {
-    val travelerList = viewModel.readAllDataTraveler.observeAsState(listOf()).value
+fun TripTravelerContent(navController: NavController, travelerViewModel: TravelerViewModel, trip: Trip) {
+    val travelerList = travelerViewModel.readAllData.observeAsState(listOf()).value
     val totalTraveler = travelerList.size
 
     Column {
-        TripTravelerButton(navController, viewModel, trip)
+        TripTravelerButton(navController, trip)
         Text(
             "Zurzeit gibt es $totalTraveler Reisende(n)",
             color = Color.White,
@@ -217,7 +225,7 @@ fun TripTravelerContent(navController: NavController, viewModel: MainViewModel, 
 }
 
 @Composable
-fun TripTravelerButton(navController: NavController, viewModel: MainViewModel, trip: Trip) {
+fun TripTravelerButton(navController: NavController, trip: Trip) {
     val tripJson = Json.encodeToString(trip)
 
     Row(
@@ -247,10 +255,10 @@ fun TripStartDestinationSection(viewModel: MainViewModel, trip: Trip) {
 }
 
 @Composable
-fun TripTravelerSection(navController: NavController, viewModel: MainViewModel, trip: Trip) {
+fun TripTravelerSection(navController: NavController, travelerViewModel: TravelerViewModel, trip: Trip) {
     Box {
         TripSection()
-        TripTravelerContent(navController, viewModel, trip)
+        TripTravelerContent(navController, travelerViewModel, trip)
     }
 }
 

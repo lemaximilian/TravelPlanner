@@ -1,5 +1,6 @@
 package com.example.travelplanner.view
 
+import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -24,14 +26,16 @@ import androidx.navigation.NavController
 import com.example.travelplanner.model.Traveler
 import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.MainViewModel
+import com.example.travelplanner.viewmodel.TravelerViewModel
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import java.util.*
 
 @Composable
-fun TripTraveler(navController: NavController, viewModel: MainViewModel, tripJson: String) {
+fun TravelerView(navController: NavController, travelerViewModel: TravelerViewModel, tripJson: String) {
+    val context = LocalContext.current
     val trip = Json.decodeFromString<Trip>(tripJson)
-    val travelerList = viewModel.readAllDataTraveler.observeAsState(listOf()).value
+    val travelerList = travelerViewModel.readAllData.observeAsState(listOf()).value
 
     Scaffold(
         topBar = { TopAppBar {
@@ -74,9 +78,14 @@ fun TripTraveler(navController: NavController, viewModel: MainViewModel, tripJso
                     },
                     confirmButton = {
                         Button(onClick = {
-                            viewModel.addTraveler(Traveler(UUID.randomUUID(), trip.id, textState.value.text))
-                            openDialog.value = false
-                            textState.value = TextFieldValue("")
+                            if(textState.value.text.isNotEmpty()) {
+                                travelerViewModel.addTraveler(Traveler(UUID.randomUUID(), trip.id, textState.value.text))
+                                openDialog.value = false
+                                textState.value = TextFieldValue("")
+                            } else {
+                                Toast.makeText(context,"Ungültige Eingabe!", Toast.LENGTH_SHORT).show()
+                            }
+
                         }) {
                             Text("Hinzufügen")
                         }
@@ -99,16 +108,13 @@ fun TripTraveler(navController: NavController, viewModel: MainViewModel, tripJso
                 Text("Keine Reisenden hinzugefügt")
             }
         } else
-            TravelerList(viewModel, tripJson)
+            TravelerList(travelerViewModel, trip, travelerList)
     }
 }
 
 @OptIn(ExperimentalMaterialApi::class, ExperimentalFoundationApi::class)
 @Composable
-fun TravelerList(viewModel: MainViewModel, tripJson: String) {
-    val trip = Json.decodeFromString<Trip>(tripJson)
-    val travelerList = viewModel.readAllDataTraveler.observeAsState(listOf()).value
-
+fun TravelerList(travelerViewModel: TravelerViewModel, trip: Trip, travelerList: List<Traveler>) {
     LazyColumn {
         stickyHeader {
             Text(
@@ -123,7 +129,7 @@ fun TravelerList(viewModel: MainViewModel, tripJson: String) {
                 text = { Text(traveler.name) },
                 icon = {
                     IconButton(onClick = {
-                        viewModel.deleteTraveler(traveler)
+                        travelerViewModel.deleteTraveler(traveler)
                     }) {
                         Icon(
                             Icons.Default.Delete,

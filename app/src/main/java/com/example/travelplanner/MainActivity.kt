@@ -28,7 +28,6 @@ class MainActivity : ComponentActivity() {
 override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val viewModel by viewModels<MainViewModel>()
         setContent {
             TravelPlannerTheme {
                 // A surface container using the 'background' color from the theme
@@ -37,7 +36,6 @@ override fun onCreate(savedInstanceState: Bundle?) {
                     color = MaterialTheme.colors.background
                 ) {
                     val navController = rememberNavController()
-                    val tripList by viewModel.getTripList().observeAsState(emptyList())
                     NavHostView(navController = navController)
                 }
             }
@@ -51,9 +49,7 @@ override fun onCreate(savedInstanceState: Bundle?) {
 @Composable
 fun DefaultPreview() {
     TravelPlannerTheme {
-        val viewModel = MainViewModel(app = Application())
         val navController = rememberNavController()
-        val tripList by viewModel.getTripList().observeAsState(emptyList())
         NavHostView(navController = navController)
     }
 }

@@ -1,7 +1,5 @@
 package com.example.travelplanner.view
 
-
-
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -34,7 +32,14 @@ fun SettingsView(navController: NavHostController) {
    Scaffold(
         topBar = {
             TopAppBar() {
-                Text("Einstellungen",Modifier.padding(horizontal = 150.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Spacer(modifier = Modifier)
+                    Text("Einstellungen")
+                    Spacer(modifier = Modifier)
+                }
             }
         },
         bottomBar = {
@@ -92,9 +97,9 @@ fun ToDoList() {
             newItemRef.child("checked").setValue(false)
             toDoList.add(item)
             checkedState.add(false)
-            Toast.makeText(context,"\"$item\" erfolgreich hinzugefügt",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"\"$item\" Erfolgreich hinzugefügt",Toast.LENGTH_SHORT).show()
         }else{
-            Toast.makeText(context,"Ungültige eingabe!",Toast.LENGTH_SHORT).show()
+            Toast.makeText(context,"Ungültige Eingabe!",Toast.LENGTH_SHORT).show()
 
 
         }

@@ -20,7 +20,6 @@ import com.example.travelplanner.model.BottomNavItem
 fun BottomNavigation(navController: NavHostController) {
     val items = listOf(
         BottomNavItem.Main,
-        BottomNavItem.AddTrip,
         BottomNavItem.Settings,
         BottomNavItem.Map
     )
