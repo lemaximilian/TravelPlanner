@@ -142,7 +142,7 @@ fun TripCard(navController: NavHostController, trip: Trip) {
     ) {
         Text(
             trip.name,
-            fontSize = 16.sp
+            fontSize = 20.sp
         )
     }
 }
