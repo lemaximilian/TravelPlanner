@@ -1,12 +1,10 @@
 package com.example.travelplanner.view
 
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.travelplanner.viewmodel.MainViewModel
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
@@ -14,11 +12,16 @@ import com.google.maps.android.compose.GoogleMap
 import com.google.maps.android.compose.rememberCameraPositionState
 
 @Composable
-fun MapView(navController: NavController, viewModel: MainViewModel) {
+fun MapView(navController: NavHostController, viewModel: MainViewModel) {
     Scaffold(
         topBar = { TopAppBar() {
-            IconButton(onClick = { navController.navigateUp() }) {
-                Icon(imageVector = Icons.Filled.ArrowBack, contentDescription = "Back")
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Spacer(modifier = Modifier)
+                Text("MapsDemo")
+                Spacer(modifier = Modifier)
             }
         }
         },
@@ -35,7 +38,7 @@ fun MapView(navController: NavController, viewModel: MainViewModel) {
             }
         },
         bottomBar = { BottomAppBar() {
-            Text("Das ist eine MapDemo")
+            BottomNavigation(navController = navController)
         }
         }
     )

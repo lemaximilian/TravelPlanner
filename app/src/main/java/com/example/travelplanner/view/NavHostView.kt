@@ -21,7 +21,8 @@ import com.example.travelplanner.viewmodel.TodoViewModel
 fun NavHostView(navController: NavHostController) {
     val context = LocalContext.current
     val todoview : TodoViewModel = viewModel(
-        factory = TodoViewModel.Factory(context.applicationContext as Application))
+        factory = TodoViewModel.Factory(context.applicationContext as Application)
+    )
     val viewModel: MainViewModel = viewModel(
         factory = MainViewModel.Factory(context.applicationContext as Application)
     )
@@ -44,6 +45,10 @@ fun NavHostView(navController: NavHostController) {
         composable("TravelerView/{tripJson}", arguments = listOf(navArgument("tripJson") { type = NavType.StringType })) { backStackEntry ->
             val tripJson = backStackEntry.arguments?.getString("tripJson")
             TravelerView(navController, travelerViewModel, tripJson ?: "")
+        }
+        composable("ExpensesView/{tripJson}", arguments = listOf(navArgument("tripJson") { type = NavType.StringType })) { backStackEntry ->
+            val tripJson = backStackEntry.arguments?.getString("tripJson")
+            ExpensesView(navController, expensesViewModel, tripJson ?: "")
         }
         composable("ToDoView/{tripJson}", arguments = listOf(navArgument("tripJson") { type = NavType.StringType })) { backStackEntry ->
             val tripJson = backStackEntry.arguments?.getString("tripJson")

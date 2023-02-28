@@ -1,12 +1,7 @@
 package com.example.travelplanner.view
 
-import android.app.Application
-import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -31,9 +26,11 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 @Composable
-fun ToDoView(navController: NavController, tripJson: String, viewModel: TodoViewModel) {
+fun ToDoView(navController: NavController, tripJson: String, todoViewModel: TodoViewModel) {
     val context = LocalContext.current
     val trip = Json.decodeFromString<Trip>(tripJson)
+    val (text, setText) = remember { mutableStateOf("") }
+    val todoItems by todoViewModel.todoItems.observeAsState(emptyList())
 
     Scaffold(
         topBar = { TopAppBar {
@@ -48,66 +45,33 @@ fun ToDoView(navController: NavController, tripJson: String, viewModel: TodoView
             }
         },
         floatingActionButton = {
-            FloatingActionButton(onClick = { }) {
-                Icon(imageVector = Icons.Filled.Add, contentDescription = "Add")
-            }
-        }
-    ) { padding ->
-        Text(text = "ToDo", modifier = Modifier.padding(padding))
-        ToDoList(todoViewModel = TodoViewModel(Application()), context = context )
 
-    }
-}
+            fun addItem(item: String) {
+                if (item.isNotEmpty()) {
+                    todoViewModel.viewModelScope.launch(Dispatchers.IO) {
+                        todoViewModel.addTodoItem(item)
+                        withContext(Dispatchers.Main) {
 
-
-
-
-
-
-
-
-@Composable
-fun ToDoList(todoViewModel: TodoViewModel, context: Context) {
-    val (text, setText) = remember { mutableStateOf("") }
-    val todoItems by todoViewModel.todoItems.observeAsState(emptyList())
-    val context = LocalContext.current
-
-    // Elemente hinzufügen
-    fun addItem(item: String) {
-        if (item.isNotEmpty()) {
-            todoViewModel.viewModelScope.launch(Dispatchers.IO) {
-                todoViewModel.addTodoItem(item)
-                withContext(Dispatchers.Main) {
-
-                    Toast.makeText(context, "\"$item\" erfolgreich hinzugefügt", Toast.LENGTH_SHORT)
-                        .show()
+                            Toast.makeText(context, "\"$item\" erfolgreich hinzugefügt", Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                } else {
+                    Toast.makeText(context, "Ungültige eingabe!", Toast.LENGTH_SHORT).show()
                 }
             }
-        } else {
-            Toast.makeText(context, "Ungültige eingabe!", Toast.LENGTH_SHORT).show()
-        }
-    }
 
-
-    fun removeItem(item: Todo) {
-        todoViewModel.viewModelScope.launch(Dispatchers.IO) {
-            todoViewModel.deleteTodoItem(item)
-        }
-    }
-
-    Scaffold(
-        floatingActionButton = {
             FloatingActionButton(
                 onClick = { addItem(text); setText("") },
-                modifier = Modifier
-                    .padding(bottom = 56.dp),
                 content = {
                     Icon(Icons.Filled.Add, contentDescription = "Hinzufügen")
                 }
             )
         }
-    ) {
-        Column {
+    ) { padding ->
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
             TextField(
                 value = text,
                 onValueChange = setText,
@@ -116,36 +80,48 @@ fun ToDoList(todoViewModel: TodoViewModel, context: Context) {
                     .padding(16.dp)
                     .fillMaxWidth()
             )
-            LazyColumn {
-                items(todoItems.size) { index ->
-                    val item = todoItems[index]
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Checkbox(
-                            checked = item.checked,
-                            onCheckedChange = {
-                                val updatedItem = item.copy(checked = it)
-                                todoViewModel.updateTodoItem(updatedItem)
-                            }
-                        )
-                        Text(
-                            item.title,
-                            style = MaterialTheme.typography.h5,
-                            modifier = Modifier
-                                .padding(start = 16.dp)
-                                .weight(1f)
-                        )
-                        IconButton(onClick = { removeItem(item) }) {
-                            Icon(Icons.Filled.Delete, contentDescription = "Löschen")
-                        }
+            ToDoList(todoViewModel, todoItems)
+        }
+    }
+    LaunchedEffect(todoItems) {}
+}
+
+@Composable
+fun ToDoList(todoViewModel: TodoViewModel, todoItems: List<Todo>) {
+    LazyColumn {
+
+        fun removeItem(item: Todo) {
+            todoViewModel.viewModelScope.launch(Dispatchers.IO) {
+                todoViewModel.deleteTodoItem(item)
+            }
+        }
+
+        items(todoItems.size) { index ->
+            val item = todoItems[index]
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Checkbox(
+                    checked = item.checked,
+                    onCheckedChange = {
+                        val updatedItem = item.copy(checked = it)
+                        todoViewModel.updateTodoItem(updatedItem)
                     }
+                )
+                Text(
+                    item.title,
+                    style = MaterialTheme.typography.h5,
+                    modifier = Modifier
+                        .padding(start = 16.dp)
+                        .weight(1f)
+                )
+                IconButton(onClick = { removeItem(item) }) {
+                    Icon(Icons.Filled.Delete, contentDescription = "Löschen")
                 }
             }
         }
     }
-    LaunchedEffect(todoItems) {}
 }

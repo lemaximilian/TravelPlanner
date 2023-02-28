@@ -197,7 +197,7 @@ fun StartDestinationButton(viewModel: MainViewModel, trip: Trip) {
                 },
                 confirmButton = {
                     Button(onClick = {
-                        if(textStateStart.value.text.isNotEmpty() || textStateDestination.value.text.isNotEmpty()) {
+                        if(textStateStart.value.text.isNotEmpty() && textStateDestination.value.text.isNotEmpty()) {
                             viewModel.updateTrip(Trip(trip.id, trip.name, textStateStart.value.text, textStateDestination.value.text))
                             openDialog.value = false
                             textStateStart.value = TextFieldValue("")
