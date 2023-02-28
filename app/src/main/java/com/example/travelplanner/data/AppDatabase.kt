@@ -5,6 +5,7 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.travelplanner.model.Traveler
+import com.example.travelplanner.model.Todo
 import com.example.travelplanner.model.Trip
 
 @Database(entities = [Trip::class, Traveler::class], version = 6, exportSchema = false)
@@ -32,6 +33,29 @@ abstract class AppDatabase: RoomDatabase() {
                 }
 
                 return instance
+            }
+        }
+    }
+}
+
+
+@Database(entities = [Todo::class], version = 1)
+abstract class TodoRoomDatabase : RoomDatabase() {
+
+    abstract fun todoDao(): TodoDao
+
+    companion object {
+        @Volatile
+        private var INSTANCE: TodoRoomDatabase? = null
+        fun getDatabase(context: Context): TodoRoomDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    TodoRoomDatabase::class.java,
+                    "todo_database")
+                .build()
+                INSTANCE = instance
+                instance
             }
         }
     }
