@@ -2,22 +2,18 @@ package com.example.travelplanner.viewmodel
 
 import android.app.Application
 import android.content.Context
-import androidx.compose.runtime.toMutableStateList
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.lifecycle.*
 import com.example.travelplanner.data.AppDatabase
 import com.example.travelplanner.data.TripRepository
 import com.example.travelplanner.model.Trip
-import com.example.travelplanner.model.TripList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import com.example.travelplanner.data.TravelerRepository
-import com.example.travelplanner.model.Traveler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
