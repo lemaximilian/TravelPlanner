@@ -35,7 +35,7 @@ fun NavHostView(navController: NavHostController) {
 
     NavHost(navController = navController, startDestination = "WelcomeView") {
         composable(BottomNavItem.Main.screen_route) { HomeView(navController, viewModel) }
-        composable(BottomNavItem.Settings.screen_route) { SettingsView(navController,todoview) }
+        composable(BottomNavItem.Settings.screen_route) { SettingsView(navController) }
         composable("WelcomeView") { WelcomeView(navController, viewModel) }
         composable("TripView/{tripJson}", arguments = listOf(navArgument("tripJson") { type = NavType.StringType })) { backStackEntry ->
             val tripJson = backStackEntry.arguments?.getString("tripJson")

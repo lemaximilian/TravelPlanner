@@ -359,8 +359,11 @@ fun ToDoContent(navController: NavController, todoview: TodoViewModel, trip: Tri
             } else {
                 var openTasks = todoList.size - totalChecked
                 Text(
-                    if (openTasks>1){
-                    "Es sind noch $openTasks Aufgaben offen."}else{"Es ist noch eine Aufgabe offen."},
+                    if (openTasks > 1){
+                    "Es sind noch $openTasks Aufgaben offen"
+                    } else {
+                        "Es ist noch eine Aufgabe offen"
+                           },
                     color = Color.White,
                     modifier = Modifier.padding(8.dp)
                 )

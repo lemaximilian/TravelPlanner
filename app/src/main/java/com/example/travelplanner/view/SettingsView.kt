@@ -29,10 +29,7 @@ import kotlinx.coroutines.withContext
 
 
 @Composable
-fun SettingsView(navController: NavHostController, todoViewModel: TodoViewModel) {
-    val context = LocalContext.current
-    val todoItems by todoViewModel.todoItems.observeAsState(emptyList())
-
+fun SettingsView(navController: NavHostController) {
    Scaffold(
         topBar = {
             TopAppBar() {
@@ -47,12 +44,10 @@ fun SettingsView(navController: NavHostController, todoViewModel: TodoViewModel)
             }
         },
         bottomBar = {
-       BottomNavigation(navController = navController)
+            BottomNavigation(navController = navController)
         }
     ) { padding ->
        Text(text = "SettingsView", modifier = Modifier.padding(padding))
-
-
    }
 
 }
