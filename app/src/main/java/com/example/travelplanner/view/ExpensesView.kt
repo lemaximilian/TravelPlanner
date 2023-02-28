@@ -16,7 +16,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -72,7 +74,7 @@ fun ExpensesView(navController: NavController, expensesViewModel: ExpensesViewMo
                         Column {
                             TextField(
                                 value = textStateDescription.value,
-                                label = { Text("Bezeichnung (z.B. Mietwagen, Tanken, Hotel)") },
+                                label = { Text("Bezeichnung${System.lineSeparator()}(z.B. Mietwagen, Tanken, Hotel)") },
                                 onValueChange = {
                                     textStateDescription.value = it
                                 })
@@ -117,8 +119,23 @@ fun ExpensesView(navController: NavController, expensesViewModel: ExpensesViewMo
             ) {
                 Text("Keine Kosten hinzugefügt")
             }
-        } else
-            ExpensesList(expensesViewModel, trip, expensesList)
+        } else {
+            var totalAmount = 0.0
+            expensesList.forEach { totalAmount += it.amount }
+
+            Column(
+                modifier = Modifier.fillMaxHeight(),
+            ) {
+                ExpensesList(expensesViewModel, trip, expensesList)
+                Text(
+                    "Gesamtkosten: $totalAmount€",
+                    fontWeight = FontWeight.Bold,
+                    fontStyle = FontStyle.Italic,
+                    fontSize = 20.sp,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+        }
     }
 }
 

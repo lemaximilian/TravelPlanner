@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
@@ -29,13 +30,14 @@ import androidx.navigation.NavController
 import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.ExpensesViewModel
 import com.example.travelplanner.viewmodel.MainViewModel
+import com.example.travelplanner.viewmodel.TodoViewModel
 import com.example.travelplanner.viewmodel.TravelerViewModel
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Composable
-fun TripView(navController: NavController, viewModel: MainViewModel, travelerViewModel: TravelerViewModel, expensesViewModel: ExpensesViewModel, tripJson: String) {
+fun TripView(navController: NavController, viewModel: MainViewModel, travelerViewModel: TravelerViewModel, expensesViewModel: ExpensesViewModel, todoview: TodoViewModel, tripJson: String) {
     val trip = Json.decodeFromString<Trip>(tripJson)
     Scaffold(
         topBar = { TopAppBar() {
@@ -45,7 +47,7 @@ fun TripView(navController: NavController, viewModel: MainViewModel, travelerVie
         }
         },
         content = { padding ->
-            TripContent(navController, viewModel, travelerViewModel, expensesViewModel, trip)
+            TripContent(navController, viewModel, travelerViewModel, expensesViewModel, todoview, trip)
         },
         bottomBar = { BottomAppBar() {
             Text(trip.name)
@@ -55,7 +57,7 @@ fun TripView(navController: NavController, viewModel: MainViewModel, travelerVie
 }
 
 @Composable
-fun TripContent(navController: NavController, viewModel: MainViewModel, travelerViewModel: TravelerViewModel, expensesViewModel: ExpensesViewModel, trip: Trip) {
+fun TripContent(navController: NavController, viewModel: MainViewModel, travelerViewModel: TravelerViewModel, expensesViewModel: ExpensesViewModel, todoview: TodoViewModel, trip: Trip) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
@@ -74,7 +76,7 @@ fun TripContent(navController: NavController, viewModel: MainViewModel, traveler
             ExpensesSection(navController, expensesViewModel, trip)
         }
         item {
-            ToDoSection(navController, trip)
+            ToDoSection(navController, todoview, trip)
         }
         item {
             PlaceholderSection()
@@ -262,20 +264,39 @@ fun ExpensesContent(navController: NavController, expensesViewModel: ExpensesVie
 
     Column {
         ExpensesButton(navController, trip)
+        Text(
+            "Derzeitige Gesamtkosten der Reise: ",
+            color = Color.White,
+            modifier = Modifier.padding(8.dp)
+        )
         if(expensesList.isNotEmpty()) {
             var totalAmount = 0.0
             expensesList.forEach { totalAmount += it.amount }
-            Text(
-                "Derzeitige Gesamtkosten der Reise: $totalAmount€",
-                color = Color.White,
-                modifier = Modifier.padding(8.dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    "$totalAmount€",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 50.sp,
+                    color = Color.White,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
         } else {
-            Text(
-                "Derzeitige Gesamtkosten der Reise: 0.00€",
-                color = Color.White,
-                modifier = Modifier.padding(8.dp)
-            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    "0.00€",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 50.sp,
+                    color = Color.White,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
         }
     }
 }
@@ -303,9 +324,38 @@ fun ExpensesButton(navController: NavController, trip: Trip) {
 }
 
 @Composable
-fun ToDoContent(navController: NavController, trip: Trip) {
+fun ToDoContent(navController: NavController, todoview: TodoViewModel, trip: Trip) {
+    val todoList = todoview.todoItems.observeAsState(listOf()).value
+
     Column {
         ToDoButton(navController, trip)
+        if(todoList.isEmpty()) {
+            Text(
+                "Sie haben derzeit keine Aufgaben zu erledigen",
+                color = Color.White,
+                modifier = Modifier.padding(8.dp)
+            )
+        } else {
+            var totalChecked = 0
+            todoList.forEach {
+                if(it.checked)
+                    totalChecked += 1
+            }
+            if(totalChecked == todoList.size) {
+                Text(
+                    "Es wurden bereits alle Aufgaben erledigt",
+                    color = Color.White,
+                    modifier = Modifier.padding(8.dp)
+                )
+            } else {
+                var openTasks = todoList.size - totalChecked
+                Text(
+                    "Es sind noch $openTasks Aufgaben offen",
+                    color = Color.White,
+                    modifier = Modifier.padding(8.dp)
+                )
+            }
+        }
     }
 }
 
@@ -356,10 +406,10 @@ fun ExpensesSection(navController: NavController, expensesViewModel: ExpensesVie
 }
 
 @Composable
-fun ToDoSection(navController: NavController, trip: Trip) {
+fun ToDoSection(navController: NavController, todoview: TodoViewModel, trip: Trip) {
     Box {
         Section()
-        ToDoContent(navController, trip)
+        ToDoContent(navController, todoview, trip)
     }
 }
 
