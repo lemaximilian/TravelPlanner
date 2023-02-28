@@ -67,6 +67,7 @@ fun TripContent(navController: NavController, viewModel: MainViewModel, traveler
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        // each section with content
         item {
             HeaderAndDelete(navController, viewModel, trip)
         }
@@ -93,6 +94,7 @@ fun TripContent(navController: NavController, viewModel: MainViewModel, traveler
 
 @Composable
 fun HeaderAndDelete(navController: NavController, viewModel: MainViewModel, trip: Trip) {
+    // header (tripname) and delete button
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
@@ -109,6 +111,7 @@ fun HeaderAndDelete(navController: NavController, viewModel: MainViewModel, trip
 
 @Composable
 fun Section() {
+    // blue rectangle with rounded corners
     SectionBox(shape = RoundedCornerShape(10.dp))
 }
 
@@ -233,6 +236,7 @@ fun StartDestinationButton(viewModel: MainViewModel, trip: Trip) {
 @Composable
 fun TravelerContent(navController: NavController, travelerViewModel: TravelerViewModel, trip: Trip) {
     val travelerList = travelerViewModel.readAllData.observeAsState(listOf()).value
+    // total numbers of travelers
     val totalTraveler = travelerList.size
 
     Column {
@@ -279,6 +283,7 @@ fun ExpensesContent(navController: NavController, expensesViewModel: ExpensesVie
             modifier = Modifier.padding(8.dp)
         )
         if(expensesList.isNotEmpty()) {
+            // iterating through expenseslist, adding each amount to totalamount
             var totalAmount = 0.0
             expensesList.forEach { totalAmount += it.amount }
             Row(
@@ -294,6 +299,7 @@ fun ExpensesContent(navController: NavController, expensesViewModel: ExpensesVie
                 )
             }
         } else {
+            // expenseslist empty
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
@@ -345,11 +351,14 @@ fun ToDoContent(navController: NavController, todoview: TodoViewModel, trip: Tri
                 modifier = Modifier.padding(8.dp)
             )
         } else {
+            // variable for total checked items in todolist
             var totalChecked = 0
+            // iterating through todolist, incrementing totalchecked if checked
             todoList.forEach {
                 if(it.checked)
                     totalChecked += 1
             }
+            // all tasks done
             if(totalChecked == todoList.size) {
                 Text(
                     "Es wurden bereits alle Aufgaben erledigt",
@@ -357,6 +366,7 @@ fun ToDoContent(navController: NavController, todoview: TodoViewModel, trip: Tri
                     modifier = Modifier.padding(8.dp)
                 )
             } else {
+                // n tasks still open
                 var openTasks = todoList.size - totalChecked
                 Text(
                     if (openTasks > 1){
@@ -465,6 +475,7 @@ fun StartDestinationSection(viewModel: MainViewModel, trip: Trip) {
     }
 }
 
+// sections, stacking blue rectangle with content
 @Composable
 fun TravelerSection(navController: NavController, travelerViewModel: TravelerViewModel, trip: Trip) {
     Box {

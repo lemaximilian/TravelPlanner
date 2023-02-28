@@ -19,6 +19,7 @@ data class Expenses(
     @PrimaryKey
     val id: UUID,
 
+    // foreignkey, specifying the trip
     @ColumnInfo(name = "tripID")
     val tripID: UUID,
 

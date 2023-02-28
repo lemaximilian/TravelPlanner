@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.travelplanner.model.Traveler
 import com.example.travelplanner.model.Trip
-import com.example.travelplanner.viewmodel.MainViewModel
 import com.example.travelplanner.viewmodel.TravelerViewModel
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -34,7 +33,9 @@ import java.util.*
 @Composable
 fun TravelerView(navController: NavController, travelerViewModel: TravelerViewModel, tripJson: String) {
     val context = LocalContext.current
+    // decoding trip json received from navhost
     val trip = Json.decodeFromString<Trip>(tripJson)
+    // create travelerlist via readalldata function in travelerviewmodel
     val travelerList = travelerViewModel.readAllData.observeAsState(listOf()).value
 
     Scaffold(
@@ -79,10 +80,14 @@ fun TravelerView(navController: NavController, travelerViewModel: TravelerViewMo
                     confirmButton = {
                         Button(onClick = {
                             if(textState.value.text.isNotEmpty()) {
+                                // create and adding new traveler object to room database with random uuid, tripid and given input
                                 travelerViewModel.addTraveler(Traveler(UUID.randomUUID(), trip.id, textState.value.text))
+                                // flip boolean to close alertdialog
                                 openDialog.value = false
+                                // clearing textfield
                                 textState.value = TextFieldValue("")
                             } else {
+                                // exception when text is empty
                                 Toast.makeText(context,"Ungültige Eingabe!", Toast.LENGTH_SHORT).show()
                             }
 
@@ -124,6 +129,8 @@ fun TravelerList(travelerViewModel: TravelerViewModel, trip: Trip, travelerList:
                 modifier = Modifier.padding(horizontal = 8.dp)
             )
         }
+        // displaying travelers in list, when adding traveler (above in travelerview) recomposition will occur
+        // cause travelerlist is observed as state (travelerlist declaration)
         items(travelerList) { traveler ->
             ListItem(
                 text = { Text(traveler.name) },

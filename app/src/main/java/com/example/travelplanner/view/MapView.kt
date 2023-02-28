@@ -33,7 +33,9 @@ fun MapView(navController: NavController, viewModel: MainViewModel) {
         }
         },
         content = { padding ->
+            // specifying place
             val thkoeln = LatLng(51.02, 7.56)
+            // settings camera position at start
             val cameraPositionState = rememberCameraPositionState {
                 position = CameraPosition.fromLatLngZoom(thkoeln, 15f)
             }

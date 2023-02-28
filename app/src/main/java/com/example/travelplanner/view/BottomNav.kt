@@ -18,6 +18,7 @@ import com.example.travelplanner.model.BottomNavItem
 
 @Composable
 fun BottomNavigation(navController: NavHostController) {
+    // bottom navigation items
     val items = listOf(
         BottomNavItem.Main,
         BottomNavItem.Settings

@@ -21,10 +21,12 @@ import com.example.travelplanner.model.Traveler
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+// create datastore instance
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore("user_preferences")
 
 class MainViewModel(app: Application): AndroidViewModel(app) {
 
+    // viewmodel factory for creating viewmodel instance with custom arguments
     class Factory(private val app: Application): ViewModelProvider.Factory {
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -37,7 +39,9 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
     private val tripRepository: TripRepository
 
     init {
+        // getting database instance
         val tripDao = AppDatabase.getInstance(app).TripDao()
+        // creating repository instance
         tripRepository = TripRepository(tripDao)
         readAllData = tripRepository.readAllData
     }
@@ -57,10 +61,11 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
     }
 
 
-    // Trip functions
+    // Trip functions from repository
     fun getTripByID(id: UUID) = tripRepository.getTripByID(id)
 
     fun addTrip(trip: Trip) {
+        // launch on worker thread to avoid main thread
         viewModelScope.launch(Dispatchers.IO) {
             tripRepository.addTrip(trip)
         }

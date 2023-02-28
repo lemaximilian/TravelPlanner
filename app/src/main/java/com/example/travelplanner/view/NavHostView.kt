@@ -20,6 +20,8 @@ import com.example.travelplanner.viewmodel.TodoViewModel
 @Composable
 fun NavHostView(navController: NavHostController) {
     val context = LocalContext.current
+
+    // creating viewmodel instances
     val todoview : TodoViewModel = viewModel(
         factory = TodoViewModel.Factory(context.applicationContext as Application)
     )
@@ -33,11 +35,13 @@ fun NavHostView(navController: NavHostController) {
         factory = ExpensesViewModel.Factory(context.applicationContext as Application)
     )
 
+    //navgraph, pass navcontroller and viewmodels to views
     NavHost(navController = navController, startDestination = "WelcomeView") {
         composable(BottomNavItem.Main.screen_route) { HomeView(navController, viewModel) }
         composable(BottomNavItem.Settings.screen_route) { SettingsView(navController) }
         composable("WelcomeView") { WelcomeView(navController, viewModel) }
         composable("TripView/{tripJson}", arguments = listOf(navArgument("tripJson") { type = NavType.StringType })) { backStackEntry ->
+            // get encoded trip from backstack to pass it as argument to view (decoding in view)
             val tripJson = backStackEntry.arguments?.getString("tripJson")
             TripView(navController, viewModel, travelerViewModel, expensesViewModel, todoview, tripJson ?: "")
         }
