@@ -8,10 +8,11 @@ import com.example.travelplanner.model.Todo
 import com.example.travelplanner.model.Traveler
 import com.example.travelplanner.model.Trip
 
-@Database(entities = [Trip::class, Traveler::class], version = 6, exportSchema = false)
+@Database(entities = [Trip::class, Traveler::class,Todo::class], version = 6, exportSchema = false)
 abstract class AppDatabase: RoomDatabase() {
     abstract fun TripDao(): TripDao
     abstract fun TravelerDao(): TravelerDao
+    abstract fun todoDao(): TodoDao
 
     companion object {
 
@@ -38,24 +39,3 @@ abstract class AppDatabase: RoomDatabase() {
     }
 }
 
-@Database(entities = [Todo::class], version = 1)
-abstract class TodoRoomDatabase : RoomDatabase() {
-
-    abstract fun todoDao(): TodoDao
-
-    companion object {
-        @Volatile
-        private var INSTANCE: TodoRoomDatabase? = null
-        fun getDatabase(context: Context): TodoRoomDatabase {
-            return INSTANCE ?: synchronized(this) {
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    TodoRoomDatabase::class.java,
-                    "todo_database")
-                    .build()
-                INSTANCE = instance
-                instance
-            }
-        }
-    }
-}

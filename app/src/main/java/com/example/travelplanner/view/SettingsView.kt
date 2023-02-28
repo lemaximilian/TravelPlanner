@@ -194,7 +194,7 @@ fun ToDoList(todoViewModel: TodoViewModel) {
     val todoItems by todoViewModel.todoItems.observeAsState(emptyList())
     val context = LocalContext.current
 
-    `
+
 
     // Elemente hinzufügen
     fun addItem(item: String) {
