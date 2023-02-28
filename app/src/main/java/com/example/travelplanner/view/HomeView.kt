@@ -9,6 +9,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -20,20 +21,26 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import com.example.travelplanner.model.Trip
 import com.example.travelplanner.viewmodel.MainViewModel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import java.util.*
 
 @Composable
-fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>) {
+fun HomeView(navController: NavHostController, viewModel: MainViewModel) {
+    val context = LocalContext.current
+    val tripList = viewModel.readAllData.observeAsState(listOf()).value
+
     Scaffold(
         topBar = {
             TopAppBar() {
-                Text("TravelPlanner")
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Spacer(modifier = Modifier)
+                    Text("TravelPlanner")
+                    Spacer(modifier = Modifier)
+                }
             }
         },
         bottomBar = {
@@ -68,9 +75,13 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripLis
                     },
                     confirmButton = {
                         Button(onClick = {
-                            viewModel.addTrip(Trip(UUID.randomUUID(), textState.value.text, null, null))
-                            openDialog.value = false
-                            textState.value = TextFieldValue("")
+                            if(textState.value.text.isNotEmpty()) {
+                                viewModel.addTrip(Trip(UUID.randomUUID(), textState.value.text, null, null))
+                                openDialog.value = false
+                                textState.value = TextFieldValue("")
+                            } else {
+                                Toast.makeText(context,"Ungültige Eingabe!",Toast.LENGTH_SHORT).show()
+                            }
                         }) {
                             Text("Erstellen")
                         }
@@ -101,13 +112,13 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripLis
                 }
             }
             else
-                TripGrid(navController, viewModel, tripList, padding)
+                TripGrid(navController, tripList, padding)
         }
     }
 }
 
 @Composable
-fun TripGrid(navController: NavHostController, viewModel: MainViewModel, tripList: List<Trip>, padding: PaddingValues) {
+fun TripGrid(navController: NavHostController, tripList: List<Trip>, padding: PaddingValues) {
     LazyVerticalGrid(columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),

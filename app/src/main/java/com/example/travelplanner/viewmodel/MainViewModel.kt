@@ -33,21 +33,16 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
     }
 
     val context = app
-    val readAllDataTrip: LiveData<List<Trip>>
-    val readAllDataTraveler: LiveData<List<Traveler>>
+    val readAllData: LiveData<List<Trip>>
     private val tripRepository: TripRepository
-    private val travelerRepository: TravelerRepository
-    private val tripList = TripList()
 
     init {
         val tripDao = AppDatabase.getInstance(app).TripDao()
-        val travelerDao = AppDatabase.getInstance(app).TravelerDao()
         tripRepository = TripRepository(tripDao)
-        travelerRepository = TravelerRepository(travelerDao)
-        readAllDataTrip = tripRepository.readAllData
-        readAllDataTraveler = travelerRepository.readAllData
+        readAllData = tripRepository.readAllData
     }
 
+    // Storing username
     val USERNAME = stringPreferencesKey("username")
 
     val getUserName: Flow<String> = context.dataStore.data
@@ -61,34 +56,8 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
         }
     }
 
-    // Traveler
-    fun getTravelerByID(id: UUID) = travelerRepository.getTravelerByID(id)
 
-    fun addTraveler(traveler: Traveler) {
-        viewModelScope.launch(Dispatchers.IO) {
-            travelerRepository.addTraveler(traveler)
-        }
-    }
-
-    fun updateTraveler(traveler: Traveler) {
-        viewModelScope.launch(Dispatchers.IO) {
-            travelerRepository.updateTraveler(traveler)
-        }
-    }
-
-    fun deleteTraveler(traveler: Traveler) {
-        viewModelScope.launch(Dispatchers.IO) {
-            travelerRepository.deleteTraveler(traveler)
-        }
-    }
-
-    fun deleteAllTravelers() {
-        viewModelScope.launch(Dispatchers.IO) {
-            travelerRepository.deleteAllTravelers()
-        }
-    }
-
-    // Trip
+    // Trip functions
     fun getTripByID(id: UUID) = tripRepository.getTripByID(id)
 
     fun addTrip(trip: Trip) {
@@ -114,10 +83,4 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
             tripRepository.deleteAllTrips()
         }
     }
-
-    fun getTripList() = tripList.getAll()
-        .map {
-            it.toMutableStateList()
-        }
-
 }

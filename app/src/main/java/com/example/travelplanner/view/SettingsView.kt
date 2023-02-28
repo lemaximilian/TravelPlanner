@@ -3,9 +3,9 @@ package com.example.travelplanner.view
 
 
 import android.content.Context
+
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -15,10 +15,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import android.widget.Toast
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.platform.LocalContext
@@ -36,7 +32,14 @@ fun SettingsView(navController: NavHostController,viewModel: TodoViewModel) {
    Scaffold(
         topBar = {
             TopAppBar() {
-                Text("Einstellungen",Modifier.padding(horizontal = 150.dp))
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    Spacer(modifier = Modifier)
+                    Text("Einstellungen")
+                    Spacer(modifier = Modifier)
+                }
             }
         },
         bottomBar = {
@@ -50,10 +53,15 @@ fun SettingsView(navController: NavHostController,viewModel: TodoViewModel) {
 }
 
 
+
+
+
+
 @Composable
 fun ToDoList(todoViewModel: TodoViewModel, context: Context) {
     val (text, setText) = remember { mutableStateOf("") }
     val todoItems by todoViewModel.todoItems.observeAsState(emptyList())
+    val context = LocalContext.current
 
     // Elemente hinzufügen
     fun addItem(item: String) {
