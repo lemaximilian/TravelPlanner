@@ -25,6 +25,5 @@ data class Trip(
     val start: String?,
 
     @ColumnInfo(name = "destination")
-    val destination: String?
-
+    val destination: String?,
 )

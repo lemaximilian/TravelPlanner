@@ -25,11 +25,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.travelplanner.model.Trip
-import com.example.travelplanner.model.TripList
 import com.example.travelplanner.viewmodel.MainViewModel
 import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import java.util.*
 
 @Composable
 fun TripView(navController: NavController, viewModel: MainViewModel, tripJson: String) {
@@ -65,16 +64,7 @@ fun TripContent(navController: NavController, viewModel: MainViewModel, trip: Tr
             TripStartDestinationSection(viewModel, trip)
         }
         item {
-            TripTravelerSection()
-        }
-        item {
-            TripTravelerSection()
-        }
-        item {
-            TripTravelerSection()
-        }
-        item {
-            TripTravelerSection()
+            TripTravelerSection(navController, viewModel, trip)
         }
     }
 }
@@ -141,7 +131,6 @@ fun TripStartDestinationContent(viewModel: MainViewModel, trip: Trip) {
         }
 
     }
-
 }
 
 @Composable
@@ -150,14 +139,16 @@ fun TripStartDestinationButton(viewModel: MainViewModel, trip: Trip) {
     val textStateStart = remember { mutableStateOf(TextFieldValue()) }
     val textStateDestination = remember { mutableStateOf(TextFieldValue()) }
 
-    Row {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
         Text("Start und Ziel der Reise",
             fontWeight = FontWeight.Bold,
             fontSize = 22.sp,
             modifier = Modifier.padding(8.dp),
             color = Color.White
         )
-        Spacer(modifier = Modifier.padding(horizontal = 45.dp))
         IconButton(onClick = { openDialog.value = true }) {
             Icon(imageVector = Icons.Filled.Add, contentDescription = "Add", tint = Color.White)
         }
@@ -194,6 +185,8 @@ fun TripStartDestinationButton(viewModel: MainViewModel, trip: Trip) {
                     Button(onClick = {
                         viewModel.updateTrip(Trip(trip.id, trip.name, textStateStart.value.text, textStateDestination.value.text))
                         openDialog.value = false
+                        textStateStart.value = TextFieldValue("")
+                        textStateDestination.value = TextFieldValue("")
                     }) {
                         Text("Hinzufügen")
                     }
@@ -209,13 +202,40 @@ fun TripStartDestinationButton(viewModel: MainViewModel, trip: Trip) {
 }
 
 @Composable
-fun TripTravelerContent() {
-    Text("Reisende(r)",
-        fontWeight = FontWeight.Bold,
-        fontSize = 22.sp,
-        modifier = Modifier.padding(8.dp),
-        color = Color.White
-    )
+fun TripTravelerContent(navController: NavController, viewModel: MainViewModel, trip: Trip) {
+    val travelerList = viewModel.readAllDataTraveler.observeAsState(listOf()).value
+    val totalTraveler = travelerList.size
+
+    Column {
+        TripTravelerButton(navController, viewModel, trip)
+        Text(
+            "Zurzeit gibt es $totalTraveler Reisende(n)",
+            color = Color.White,
+            modifier = Modifier.padding(8.dp)
+        )
+    }
+}
+
+@Composable
+fun TripTravelerButton(navController: NavController, viewModel: MainViewModel, trip: Trip) {
+    val tripJson = Json.encodeToString(trip)
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text("Reisende(r)",
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp,
+            modifier = Modifier.padding(8.dp),
+            color = Color.White
+        )
+        IconButton(onClick = {
+            navController.navigate("TravelerView/$tripJson")
+        }) {
+            Icon(imageVector = Icons.Filled.Add, contentDescription = "Add", tint = Color.White)
+        }
+    }
 }
 
 @Composable
@@ -227,10 +247,10 @@ fun TripStartDestinationSection(viewModel: MainViewModel, trip: Trip) {
 }
 
 @Composable
-fun TripTravelerSection() {
+fun TripTravelerSection(navController: NavController, viewModel: MainViewModel, trip: Trip) {
     Box {
         TripSection()
-        TripTravelerContent()
+        TripTravelerContent(navController, viewModel, trip)
     }
 }
 

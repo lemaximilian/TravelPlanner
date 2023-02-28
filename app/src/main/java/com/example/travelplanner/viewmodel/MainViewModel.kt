@@ -16,8 +16,9 @@ import java.util.*
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.travelplanner.data.TravelerRepository
+import com.example.travelplanner.model.Traveler
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore("user_preferences")
@@ -32,14 +33,19 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
     }
 
     val context = app
-    val readAllData: LiveData<List<Trip>>
+    val readAllDataTrip: LiveData<List<Trip>>
+    val readAllDataTraveler: LiveData<List<Traveler>>
     private val tripRepository: TripRepository
+    private val travelerRepository: TravelerRepository
     private val tripList = TripList()
 
     init {
         val tripDao = AppDatabase.getInstance(app).TripDao()
+        val travelerDao = AppDatabase.getInstance(app).TravelerDao()
         tripRepository = TripRepository(tripDao)
-        readAllData = tripRepository.readAllData
+        travelerRepository = TravelerRepository(travelerDao)
+        readAllDataTrip = tripRepository.readAllData
+        readAllDataTraveler = travelerRepository.readAllData
     }
 
     val USERNAME = stringPreferencesKey("username")
@@ -55,6 +61,34 @@ class MainViewModel(app: Application): AndroidViewModel(app) {
         }
     }
 
+    // Traveler
+    fun getTravelerByID(id: UUID) = travelerRepository.getTravelerByID(id)
+
+    fun addTraveler(traveler: Traveler) {
+        viewModelScope.launch(Dispatchers.IO) {
+            travelerRepository.addTraveler(traveler)
+        }
+    }
+
+    fun updateTraveler(traveler: Traveler) {
+        viewModelScope.launch(Dispatchers.IO) {
+            travelerRepository.updateTraveler(traveler)
+        }
+    }
+
+    fun deleteTraveler(traveler: Traveler) {
+        viewModelScope.launch(Dispatchers.IO) {
+            travelerRepository.deleteTraveler(traveler)
+        }
+    }
+
+    fun deleteAllTravelers() {
+        viewModelScope.launch(Dispatchers.IO) {
+            travelerRepository.deleteAllTravelers()
+        }
+    }
+
+    // Trip
     fun getTripByID(id: UUID) = tripRepository.getTripByID(id)
 
     fun addTrip(trip: Trip) {

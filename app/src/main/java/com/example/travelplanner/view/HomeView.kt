@@ -33,7 +33,7 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripLis
     Scaffold(
         topBar = {
             TopAppBar() {
-                Text("Travelplanner")
+                Text("TravelPlanner")
             }
         },
         bottomBar = {
@@ -59,7 +59,10 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripLis
                         )
                     },
                     text = {
-                           TextField(value = textState.value, onValueChange = {
+                           TextField(
+                               value = textState.value,
+                               label = { Text("Name der Reise") },
+                               onValueChange = {
                                textState.value = it
                            })
                     },
@@ -67,6 +70,7 @@ fun HomeView(navController: NavHostController, viewModel: MainViewModel, tripLis
                         Button(onClick = {
                             viewModel.addTrip(Trip(UUID.randomUUID(), textState.value.text, null, null))
                             openDialog.value = false
+                            textState.value = TextFieldValue("")
                         }) {
                             Text("Erstellen")
                         }
@@ -136,7 +140,10 @@ fun TripCard(navController: NavHostController, trip: Trip) {
             .width(180.dp)
             .padding(paddingValues = PaddingValues(horizontal = 4.dp))
     ) {
-        Text(trip.name)
+        Text(
+            trip.name,
+            fontSize = 16.sp
+        )
     }
 }
 
