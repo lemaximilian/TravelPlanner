@@ -37,6 +37,7 @@ fun MapView(navController: NavController, viewModel: MainViewModel) {
             val cameraPositionState = rememberCameraPositionState {
                 position = CameraPosition.fromLatLngZoom(thkoeln, 15f)
             }
+            // Crashing!!
             GoogleMap(
                 modifier = Modifier.fillMaxSize(),
                 cameraPositionState = cameraPositionState

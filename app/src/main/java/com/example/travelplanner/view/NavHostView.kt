@@ -41,7 +41,7 @@ fun NavHostView(navController: NavHostController) {
             val tripJson = backStackEntry.arguments?.getString("tripJson")
             TripView(navController, viewModel, travelerViewModel, expensesViewModel, todoview, tripJson ?: "")
         }
-        composable("MapView") { MapView(navController, viewModel) }
+        //composable("MapView") { MapView(navController, viewModel) }
         composable("TravelerView/{tripJson}", arguments = listOf(navArgument("tripJson") { type = NavType.StringType })) { backStackEntry ->
             val tripJson = backStackEntry.arguments?.getString("tripJson")
             TravelerView(navController, travelerViewModel, tripJson ?: "")
