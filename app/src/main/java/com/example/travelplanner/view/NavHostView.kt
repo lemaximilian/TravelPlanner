@@ -38,12 +38,16 @@ fun NavHostView(navController: NavHostController) {
         composable("WelcomeView") { WelcomeView(navController, viewModel) }
         composable("TripView/{tripJson}", arguments = listOf(navArgument("tripJson") { type = NavType.StringType })) { backStackEntry ->
             val tripJson = backStackEntry.arguments?.getString("tripJson")
-            TripView(navController, viewModel, travelerViewModel, tripJson ?: "")
+            TripView(navController, viewModel, travelerViewModel, expensesViewModel, tripJson ?: "")
         }
         composable(BottomNavItem.Map.screen_route) { MapView(navController, viewModel) }
         composable("TravelerView/{tripJson}", arguments = listOf(navArgument("tripJson") { type = NavType.StringType })) { backStackEntry ->
             val tripJson = backStackEntry.arguments?.getString("tripJson")
             TravelerView(navController, travelerViewModel, tripJson ?: "")
+        }
+        composable("ToDoView/{tripJson}", arguments = listOf(navArgument("tripJson") { type = NavType.StringType })) { backStackEntry ->
+            val tripJson = backStackEntry.arguments?.getString("tripJson")
+            ToDoView(navController, tripJson ?: "")
         }
     }
 }

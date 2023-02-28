@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.travelplanner.model.Trip
+import com.example.travelplanner.viewmodel.ExpensesViewModel
 import com.example.travelplanner.viewmodel.MainViewModel
 import com.example.travelplanner.viewmodel.TravelerViewModel
 import kotlinx.serialization.decodeFromString
@@ -34,7 +35,7 @@ import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
 @Composable
-fun TripView(navController: NavController, viewModel: MainViewModel, travelerViewModel: TravelerViewModel, tripJson: String) {
+fun TripView(navController: NavController, viewModel: MainViewModel, travelerViewModel: TravelerViewModel, expensesViewModel: ExpensesViewModel, tripJson: String) {
     val trip = Json.decodeFromString<Trip>(tripJson)
     Scaffold(
         topBar = { TopAppBar() {
@@ -44,7 +45,7 @@ fun TripView(navController: NavController, viewModel: MainViewModel, travelerVie
         }
         },
         content = { padding ->
-            TripContent(navController, viewModel, travelerViewModel, trip)
+            TripContent(navController, viewModel, travelerViewModel, expensesViewModel, trip)
         },
         bottomBar = { BottomAppBar() {
             Text(trip.name)
@@ -54,26 +55,35 @@ fun TripView(navController: NavController, viewModel: MainViewModel, travelerVie
 }
 
 @Composable
-fun TripContent(navController: NavController, viewModel: MainViewModel, travelerViewModel: TravelerViewModel, trip: Trip) {
+fun TripContent(navController: NavController, viewModel: MainViewModel, travelerViewModel: TravelerViewModel, expensesViewModel: ExpensesViewModel, trip: Trip) {
     LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         item {
-            TripHeaderAndDelete(navController, viewModel, trip)
+            HeaderAndDelete(navController, viewModel, trip)
         }
         item {
-            TripStartDestinationSection(viewModel, trip)
+            StartDestinationSection(viewModel, trip)
         }
         item {
-            TripTravelerSection(navController, travelerViewModel, trip)
+            TravelerSection(navController, travelerViewModel, trip)
+        }
+        item {
+            ExpensesSection(navController, expensesViewModel, trip)
+        }
+        item {
+            ToDoSection(navController, trip)
+        }
+        item {
+            PlaceholderSection()
         }
     }
 }
 
 @Composable
-fun TripHeaderAndDelete(navController: NavController, viewModel: MainViewModel, trip: Trip) {
+fun HeaderAndDelete(navController: NavController, viewModel: MainViewModel, trip: Trip) {
     Row {
         Text(text = trip.name, fontWeight = FontWeight.Bold, fontSize = 50.sp)
         Spacer(modifier = Modifier.padding(horizontal = 120.dp))
@@ -87,7 +97,7 @@ fun TripHeaderAndDelete(navController: NavController, viewModel: MainViewModel, 
 }
 
 @Composable
-fun TripSection() {
+fun Section() {
     SectionBox(shape = RoundedCornerShape(10.dp))
 }
 
@@ -107,11 +117,11 @@ fun SectionBox(shape: Shape) {
 }
 
 @Composable
-fun TripStartDestinationContent(viewModel: MainViewModel, trip: Trip) {
+fun StartDestinationContent(viewModel: MainViewModel, trip: Trip) {
     val tripLive = viewModel.getTripByID(trip.id).observeAsState().value
 
     Column {
-        TripStartDestinationButton(viewModel, trip)
+        StartDestinationButton(viewModel, trip)
         if(tripLive?.start == null && tripLive?.destination == null) {
             Text(
                     "Es wurde bisher kein Start und Ziel hinzugefügt.",
@@ -137,7 +147,7 @@ fun TripStartDestinationContent(viewModel: MainViewModel, trip: Trip) {
 }
 
 @Composable
-fun TripStartDestinationButton(viewModel: MainViewModel, trip: Trip) {
+fun StartDestinationButton(viewModel: MainViewModel, trip: Trip) {
     val context = LocalContext.current
     val openDialog = remember { mutableStateOf(false) }
     val textStateStart = remember { mutableStateOf(TextFieldValue()) }
@@ -210,12 +220,12 @@ fun TripStartDestinationButton(viewModel: MainViewModel, trip: Trip) {
 }
 
 @Composable
-fun TripTravelerContent(navController: NavController, travelerViewModel: TravelerViewModel, trip: Trip) {
+fun TravelerContent(navController: NavController, travelerViewModel: TravelerViewModel, trip: Trip) {
     val travelerList = travelerViewModel.readAllData.observeAsState(listOf()).value
     val totalTraveler = travelerList.size
 
     Column {
-        TripTravelerButton(navController, trip)
+        TravelerButton(navController, trip)
         Text(
             "Zurzeit gibt es $totalTraveler Reisende(n)",
             color = Color.White,
@@ -225,7 +235,7 @@ fun TripTravelerContent(navController: NavController, travelerViewModel: Travele
 }
 
 @Composable
-fun TripTravelerButton(navController: NavController, trip: Trip) {
+fun TravelerButton(navController: NavController, trip: Trip) {
     val tripJson = Json.encodeToString(trip)
 
     Row(
@@ -247,18 +257,116 @@ fun TripTravelerButton(navController: NavController, trip: Trip) {
 }
 
 @Composable
-fun TripStartDestinationSection(viewModel: MainViewModel, trip: Trip) {
-    Box {
-        TripSection()
-        TripStartDestinationContent(viewModel, trip)
+fun ExpensesContent(navController: NavController, expensesViewModel: ExpensesViewModel, trip: Trip) {
+    val expensesList = expensesViewModel.readAllData.observeAsState(listOf()).value
+
+    Column {
+        ExpensesButton(navController, trip)
+        if(expensesList.isNotEmpty()) {
+            var totalAmount = 0.0
+            expensesList.forEach { totalAmount += it.amount }
+            Text(
+                "Derzeitige Gesamtkosten der Reise: $totalAmount€",
+                color = Color.White,
+                modifier = Modifier.padding(8.dp)
+            )
+        } else {
+            Text(
+                "Derzeitige Gesamtkosten der Reise: 0.00€",
+                color = Color.White,
+                modifier = Modifier.padding(8.dp)
+            )
+        }
     }
 }
 
 @Composable
-fun TripTravelerSection(navController: NavController, travelerViewModel: TravelerViewModel, trip: Trip) {
+fun ExpensesButton(navController: NavController, trip: Trip) {
+    val tripJson = Json.encodeToString(trip)
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text("Reisekosten",
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp,
+            modifier = Modifier.padding(8.dp),
+            color = Color.White
+        )
+        IconButton(onClick = {
+            navController.navigate("ExpensesView/$tripJson")
+        }) {
+            Icon(imageVector = Icons.Filled.Add, contentDescription = "Add", tint = Color.White)
+        }
+    }
+}
+
+@Composable
+fun ToDoContent(navController: NavController, trip: Trip) {
+    Column {
+        ToDoButton(navController, trip)
+    }
+}
+
+@Composable
+fun ToDoButton(navController: NavController, trip: Trip) {
+    val tripJson = Json.encodeToString(trip)
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text("To-Do Liste",
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp,
+            modifier = Modifier.padding(8.dp),
+            color = Color.White
+        )
+        IconButton(onClick = {
+            navController.navigate("ToDoView/$tripJson")
+        }) {
+            Icon(imageVector = Icons.Filled.Add, contentDescription = "Add", tint = Color.White)
+        }
+    }
+}
+
+@Composable
+fun StartDestinationSection(viewModel: MainViewModel, trip: Trip) {
     Box {
-        TripSection()
-        TripTravelerContent(navController, travelerViewModel, trip)
+        Section()
+        StartDestinationContent(viewModel, trip)
+    }
+}
+
+@Composable
+fun TravelerSection(navController: NavController, travelerViewModel: TravelerViewModel, trip: Trip) {
+    Box {
+        Section()
+        TravelerContent(navController, travelerViewModel, trip)
+    }
+}
+
+@Composable
+fun ExpensesSection(navController: NavController, expensesViewModel: ExpensesViewModel, trip: Trip) {
+    Box {
+        Section()
+        ExpensesContent(navController, expensesViewModel, trip)
+    }
+}
+
+@Composable
+fun ToDoSection(navController: NavController, trip: Trip) {
+    Box {
+        Section()
+        ToDoContent(navController, trip)
+    }
+}
+
+@Composable
+fun PlaceholderSection() {
+    Box {
+        Section()
     }
 }
 
