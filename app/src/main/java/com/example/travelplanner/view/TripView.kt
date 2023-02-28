@@ -138,7 +138,7 @@ fun StartDestinationContent(viewModel: MainViewModel, trip: Trip) {
         StartDestinationButton(viewModel, trip)
         if(tripLive?.start == null && tripLive?.destination == null) {
             Text(
-                    "Es wurde bisher kein Start und Ziel hinzugefügt.",
+                    "Es wurde bisher kein Start und Ziel hinzugefügt",
                     color = Color.White,
                     modifier = Modifier.padding(8.dp)
                 )
@@ -171,12 +171,16 @@ fun StartDestinationButton(viewModel: MainViewModel, trip: Trip) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("Start und Ziel der Reise",
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-            modifier = Modifier.padding(8.dp),
-            color = Color.White
-        )
+        Row(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Icon(imageVector = Icons.Filled.Flag, contentDescription = "Flag", tint = Color.White)
+            Text("Start und Ziel der Reise",
+                fontWeight = FontWeight.Bold,
+                fontSize = 22.sp,
+                color = Color.White
+            )
+        }
         IconButton(onClick = { openDialog.value = true }) {
             Icon(imageVector = Icons.Filled.Add, contentDescription = "Add", tint = Color.White)
         }
@@ -257,12 +261,16 @@ fun TravelerButton(navController: NavController, trip: Trip) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("Reisende(r)",
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-            modifier = Modifier.padding(8.dp),
-            color = Color.White
-        )
+        Row(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Icon(imageVector = Icons.Filled.PeopleAlt, contentDescription = "Traveler", tint = Color.White)
+            Text("Reisende(r)",
+                fontWeight = FontWeight.Bold,
+                fontSize = 22.sp,
+                color = Color.White
+            )
+        }
         IconButton(onClick = {
             navController.navigate("TravelerView/$tripJson")
         }) {
@@ -324,12 +332,16 @@ fun ExpensesButton(navController: NavController, trip: Trip) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("Reisekosten",
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-            modifier = Modifier.padding(8.dp),
-            color = Color.White
-        )
+        Row(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Icon(imageVector = Icons.Filled.Euro, contentDescription = "Expenses", tint = Color.White)
+            Text("Reisekosten",
+                fontWeight = FontWeight.Bold,
+                fontSize = 22.sp,
+                color = Color.White
+            )
+        }
         IconButton(onClick = {
             navController.navigate("ExpensesView/$tripJson")
         }) {
@@ -390,12 +402,16 @@ fun ToDoButton(navController: NavController, trip: Trip) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("To-Do Liste",
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-            modifier = Modifier.padding(8.dp),
-            color = Color.White
-        )
+        Row(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Icon(imageVector = Icons.Filled.Task, contentDescription = "ToDo", tint = Color.White)
+            Text("To-Do Liste",
+                fontWeight = FontWeight.Bold,
+                fontSize = 22.sp,
+                color = Color.White
+            )
+        }
         IconButton(onClick = {
             navController.navigate("ToDoView/$tripJson")
         }) {
@@ -418,12 +434,16 @@ fun MapHeader(navController: NavController) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("Karte (Work in Progress)",
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-            modifier = Modifier.padding(8.dp),
-            color = Color.White
-        )
+        Row(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Icon(imageVector = Icons.Filled.Place, contentDescription = "Map", tint = Color.White)
+            Text("Karte (Work in Progress)",
+                fontWeight = FontWeight.Bold,
+                fontSize = 22.sp,
+                color = Color.White
+            )
+        }
         IconButton(onClick = {
             //navController.navigate("MapView")
         }) {
@@ -446,17 +466,21 @@ fun PhotoButton(navController: NavController, trip: Trip) {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        Text("Fotos",
-            fontWeight = FontWeight.Bold,
-            fontSize = 22.sp,
-            modifier = Modifier.padding(8.dp),
-            color = Color.White
-        )
+        Row(
+            modifier = Modifier.padding(8.dp)
+        ) {
+            Icon(imageVector = Icons.Filled.Landscape, contentDescription = "Landscape", tint = Color.White)
+            Text("Fotos (Work in Progress)",
+                fontWeight = FontWeight.Bold,
+                fontSize = 22.sp,
+                color = Color.White
+            )
+        }
         Row {
             IconButton(onClick = {
                 //navController.navigate("PhotoView")
             }) {
-                Icon(imageVector = Icons.Filled.CameraAlt, contentDescription = "TakePhoto", tint = Color.White)
+                Icon(imageVector = Icons.Filled.PhotoCamera, contentDescription = "TakePhoto", tint = Color.White)
             }
             IconButton(onClick = {
                 //navController.navigate("PhotoView")
