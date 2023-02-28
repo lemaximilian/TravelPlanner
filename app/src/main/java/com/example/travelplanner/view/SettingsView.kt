@@ -50,7 +50,7 @@ fun SettingsView(navController: NavHostController, todoViewModel: TodoViewModel)
         }
     ) { padding ->
        Text(text = "SettingsView", modifier = Modifier.padding(padding))
-       ToDoList(todoViewModel, todoItems)
+
    }
 
 }
